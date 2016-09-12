@@ -120,13 +120,11 @@
   <ItemGroup>
     <ClCompile Include="LoadShader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="VertexArrayObject.cpp" />
-    <ClCompile Include="VertexBufferObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LoadShader.h" />
     <ClInclude Include="VertexArrayObject.h" />
-    <ClInclude Include="VertexBufferObject.h" />
+    <ClInclude Include="VertexBufferObjects.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="triangles.frag" />

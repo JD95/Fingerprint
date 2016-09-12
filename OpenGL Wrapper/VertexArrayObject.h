@@ -20,7 +20,7 @@ public:
 
 	void bindVertexArray(const int index)
 	{
-		static_assert(index > 0 && index <= n, "Vertex Array Index out of bounds");
+		//static_assert(index > 0 && index < n, "Vertex Array Index out of bounds");
 		glBindVertexArray(index);
 	}
 };

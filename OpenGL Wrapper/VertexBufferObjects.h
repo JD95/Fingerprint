@@ -1,6 +1,12 @@
 #pragma once
 
+#include <iostream>
+#include <vector>
+#include <array>
 #include <GL/glew.h>
+
+using std::vector;
+using std::array;
 
 class VertexBufferObject
 {
@@ -23,6 +29,7 @@ public:
 	}
 };
 
+
 template <int n>
 class ArrayBufferObject : public VertexBufferObject
 {
@@ -35,8 +42,8 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 	}
 
-	void setArrayBufferData(GLfloat[][n] data, int usage)
+	void setArrayBufferData(const vector<array<GLfloat,n>> &data)
 	{
-		glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, usage);
+		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(GLfloat) * n, &data[0], GL_STATIC_DRAW);
 	}
 };

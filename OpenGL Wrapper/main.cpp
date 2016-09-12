@@ -1,8 +1,14 @@
 // C++ Headers
 #include <string>
 #include <iostream>
+#include <vector>
+#include <array>
+
 #include <GL/glew.h>
 #include <SDL.h>
+
+#include "VertexArrayObject.h"
+#include "VertexBufferObjects.h"
 
 #include "LoadShader.h"
 std::string programName = "Headerphile SDL2 - OpenGL thing";
@@ -13,15 +19,7 @@ SDL_Window *mainWindow;
 // Our opengl context handle
 SDL_GLContext mainContext;
 
-
-enum VAO_IDs { Triangles, NumVAOs }; 
-enum Buffer_IDs { ArrayBuffer, NumBuffers }; 
 enum Attrib_IDs { vPosition = 0 };
-
-GLuint VAOs[NumVAOs]; 
-GLuint Buffers[NumBuffers];
-
-const GLuint NumVertices = 6;
 
 #define BUFFER_OFFSET(offset) ((void *)(offset))
 
@@ -31,6 +29,9 @@ void CheckSDLError(int line);
 void RunGame();
 void Cleanup();
 
+
+using std::vector;
+using std::array;
 
 bool SDL_Init()
 {
@@ -110,10 +111,11 @@ int main(int argc, char *argv[])
 }
 
 
-void display(void) {
+template <int n>
+void display(VertexArrayObject<n> vao, vector<array<GLfloat, 2>> verts) {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glBindVertexArray(VAOs[Triangles]); 
-	glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+	vao.bindVertexArray(0);
+	glDrawArrays(GL_TRIANGLES, 0, verts.size());
 	glFlush();
 }
 
@@ -122,23 +124,24 @@ void RunGame()
 {
 	bool loop = true;
 
-	glGenVertexArrays(NumVAOs, VAOs); 
+	VertexArrayObject<1> vao;
 
-	glBindVertexArray(VAOs[Triangles]);
+	vao.bindVertexArray(0);
 
-	GLfloat vertices[NumVertices][2] = { { -0.90, -0.90 } // Triangle 1 
-									   , { 0.85, -0.90 } 
-									   , { -0.90, 0.85 }
-									   , { 0.90, -0.85 } // Triangle 2 
-									   , { 0.90, 0.90  } 
-									   , { -0.85, 0.90 } 
-									   };
+	vector<array<GLfloat,2>> vertices = 
+		{ { -0.90f, -0.90f } // Triangle 1 
+		, { 0.85f, -0.90f } 
+		, { -0.90f, 0.85f }
+		, { 0.90f, -0.85f } // Triangle 2 
+		, { 0.90f, 0.90f  } 
+		, { -0.85f, 0.90f } 
+		};
 
-	glGenBuffers(NumBuffers, Buffers); 
+	ArrayBufferObject<2> verts;
 
-	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+	verts.bindArrayBuffer();
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	verts.setArrayBufferData(vertices);
 
 	ShaderInfo info("triangles.vert", "triangles.frag");
 	GLuint program = LoadShaders(info);
@@ -149,7 +152,7 @@ void RunGame()
 
 	while (loop)
 	{
-		display();
+		display<1>(vao, vertices);
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
