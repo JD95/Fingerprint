@@ -29,5 +29,14 @@ struct ShaderInfo {
 	}
 };
 
+void load_shader(const char * shader_file, GLuint & vertexShader);
+
+void check_load_status(GLuint & shader);
+
+void check_load_status(GLuint & shader, string fail_message);
+
+void check_link_status(GLuint program);
+
 GLuint LoadShaders(ShaderInfo shaderInfo);
+
 const char* getShaderProgram(const char *filePath, string &shaderProgramText);

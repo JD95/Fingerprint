@@ -8,18 +8,13 @@
 // ---------------------------------------------------------------------------
 #include "LoadShader.h"
 
-GLuint LoadShaders(ShaderInfo shaderInfo)
+void load_shader(const char* shader_file, GLuint &vertexShader)
 {
-	GLuint program;
-	GLuint vertexShader;
-	GLuint fragmentShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);	// create a vertex shader object
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);	// create a fragment shader object
-
-															// load and compile vertex shader
 	string shaderProgramText;
-	const char* text = getShaderProgram(shaderInfo.vShaderFile, shaderProgramText);
+
+	const char* text = getShaderProgram(shader_file, shaderProgramText);
 	GLint length = shaderProgramText.size();
+
 	glShaderSource(vertexShader, 1, &text, NULL);
 	glCompileShader(vertexShader);
 
@@ -27,37 +22,51 @@ GLuint LoadShaders(ShaderInfo shaderInfo)
 	{
 		cout << text[i];
 	}
+}
 
+void check_load_status(GLuint &shader)
+{
+	check_load_status(shader, "Shader Compilation has Failed...");
+}
+
+void check_load_status(GLuint &shader, string fail_message)
+{
 	GLint status;
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 
 	if (!(status == GL_TRUE))
-		cerr << "\nVertex Shader compilation failed..." << '\n';
+		cerr << fail_message << '\n';
 
-	char *infoLog = new char[100];
+	char infoLog[100];
 	GLsizei bufSize = 100;
-	glGetShaderInfoLog(vertexShader, bufSize, NULL, infoLog);
+	glGetShaderInfoLog(shader, bufSize, NULL, infoLog);
 	for (int i = 0; i < bufSize; i++)
 		cout << infoLog[i];
-	delete[] infoLog;
+}
 
+void check_link_status(GLuint program)
+{
+	GLint link_status;
+	glGetProgramiv(program, GL_LINK_STATUS, &link_status);
+	if (!(link_status == GL_TRUE))
+		cout << "Link failed..." << endl;
+}
+
+GLuint LoadShaders(ShaderInfo shaderInfo)
+{
+	GLuint program;
+	GLuint vertexShader;
+	GLuint fragmentShader;
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);	 // create a vertex shader object
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // create a fragment shader object
+
+	// load and compile vertex shader
+	load_shader(shaderInfo.vShaderFile, vertexShader);
+	check_load_status(vertexShader, "\nVertex Shader compilation failed...");
+	
 	// load and compile fragment shader
-	shaderProgramText = "";
-	text = getShaderProgram(shaderInfo.fShaderFile, shaderProgramText);
-	glShaderSource(fragmentShader, 1, &text, NULL);
-	glCompileShader(fragmentShader);
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
-
-	if (!(status == GL_TRUE))
-		cerr << "\nFragment Shader compilation failed..." << '\n';
-
-	infoLog = new char[100];
-	bufSize = 0;
-	glGetShaderInfoLog(fragmentShader, bufSize, NULL, infoLog);
-	for (int i = 0; i < bufSize; i++)
-		cout << infoLog[i] << endl;
-	delete[] infoLog;
+	load_shader(shaderInfo.fShaderFile, fragmentShader);
+	check_load_status(fragmentShader, "\nFragment Shader compilation failed...");
 
 	// create the shader program
 	program = glCreateProgram();
@@ -69,11 +78,8 @@ GLuint LoadShaders(ShaderInfo shaderInfo)
 	// link the objects for an executable program
 	glLinkProgram(program);
 
-	glGetProgramiv(program, GL_LINK_STATUS, &status);
-	if (!(status == GL_TRUE))
-		cout << "Link failed..." << endl;
+	check_link_status(program);
 
-	// return the program
 	return program;
 }
 

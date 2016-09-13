@@ -8,39 +8,56 @@
 using std::vector;
 using std::array;
 
-class VertexBufferObject
+/*
+	Manages the lifetime of many buffer objects
+*/
+template <int n>
+class VboManager
 {
 private:
-	GLuint idArray[1];
-
-protected:
-	GLuint id;
+	GLuint idArray[n];
 
 public:
-	VertexBufferObject()
+	VboManager()
 	{
-		glGenBuffers(1, idArray);
-		id = idArray[0];
+		glGenBuffers(n, idArray);
 	}
 
-	~VertexBufferObject()
+	~VboManager()
 	{
-		glDeleteBuffers(1, idArray);
+		glDeleteBuffers(n, idArray);
 	}
+
+	GLuint getID(const int index)
+	{
+		return idArray[index];
+	}
+
 };
 
 
+/*
+	Binds an ArrayBuffer and passes array values to GPU
+*/
 template <int n>
-class ArrayBufferObject : public VertexBufferObject
+class ArrayBufferObject
 {
+	GLuint id;
 public:
-	ArrayBufferObject() {}
-	~ArrayBufferObject() {}
-
-	void bindArrayBuffer()
+	ArrayBufferObject(const GLuint id) 
 	{
+		this->id = id;
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 	}
+
+	ArrayBufferObject(const GLuint id, const vector<array<GLfloat, n>> &data)
+	{
+		this->id = id;
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		setArrayBufferData(data);
+	}
+
+	~ArrayBufferObject() {}
 
 	void setArrayBufferData(const vector<array<GLfloat,n>> &data)
 	{

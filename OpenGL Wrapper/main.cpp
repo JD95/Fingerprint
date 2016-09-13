@@ -112,9 +112,9 @@ int main(int argc, char *argv[])
 
 
 template <int n>
-void display(VertexArrayObject<n> vao, vector<array<GLfloat, 2>> verts) {
+void display(VaoManager<n> &vao_manager, vector<array<GLfloat, 2>> verts) {
 	glClear(GL_COLOR_BUFFER_BIT);
-	vao.bindVertexArray(0);
+	VertexArrayObject vao(vao_manager.getID(0));
 	glDrawArrays(GL_TRIANGLES, 0, verts.size());
 	glFlush();
 }
@@ -124,9 +124,9 @@ void RunGame()
 {
 	bool loop = true;
 
-	VertexArrayObject<1> vao;
+	VaoManager<1> vao_manager;
 
-	vao.bindVertexArray(0);
+	VertexArrayObject vao(vao_manager.getID(0));
 
 	vector<array<GLfloat,2>> vertices = 
 		{ { -0.90f, -0.90f } // Triangle 1 
@@ -136,12 +136,10 @@ void RunGame()
 		, { 0.90f, 0.90f  } 
 		, { -0.85f, 0.90f } 
 		};
+	
+	VboManager<1> vbo;
 
-	ArrayBufferObject<2> verts;
-
-	verts.bindArrayBuffer();
-
-	verts.setArrayBufferData(vertices);
+	ArrayBufferObject<2> verts(vbo.getID(0), vertices);
 
 	ShaderInfo info("triangles.vert", "triangles.frag");
 	GLuint program = LoadShaders(info);
@@ -152,7 +150,7 @@ void RunGame()
 
 	while (loop)
 	{
-		display<1>(vao, vertices);
+		display<1>(vao_manager, vertices);
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
@@ -172,9 +170,6 @@ void RunGame()
 			}
 		}
 		SDL_GL_SwapWindow(mainWindow);
-		// Swap our back buffer to the front
-		// This is the same as :
-		// 		SDL_RenderPresent(&renderer);
 	}
 }
 

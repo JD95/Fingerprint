@@ -2,26 +2,38 @@
 
 #include <GL\glew.h>
 
-template <int n> class VertexArrayObject
+template <int n> class VaoManager
 {
 	GLuint ids[n];
 
 public:
 
-	VertexArrayObject()
+	VaoManager()
 	{
 		glGenVertexArrays(n, ids);
 	}
 
-	~VertexArrayObject()
+	~VaoManager()
 	{
 		glDeleteVertexArrays(n, ids);
 	}
 
-	void bindVertexArray(const int index)
+	GLuint getID(const int index)
 	{
-		//static_assert(index > 0 && index < n, "Vertex Array Index out of bounds");
-		glBindVertexArray(index);
+		return ids[index];
 	}
+
 };
 
+
+class VertexArrayObject
+{
+	GLuint id;
+
+public:
+	VertexArrayObject(GLuint id)
+	{
+		this->id = id;
+		glBindVertexArray(id);
+	}
+};
