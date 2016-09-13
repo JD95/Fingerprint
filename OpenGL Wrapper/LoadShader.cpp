@@ -8,7 +8,22 @@
 // ---------------------------------------------------------------------------
 #include "LoadShader.h"
 
-void load_shader(const char* shader_file, GLuint &vertexShader)
+#include <vector>
+#include <tuple>
+
+std::vector<std::tuple<const char*, int, const char*>> ShaderInfo::getShaders()
+{
+	auto shaders = {
+		std::make_tuple(vShaderFile, GL_VERTEX_SHADER, "\nVertex Shader compilation failed..."),
+		std::make_tuple(fShaderFile, GL_FRAGMENT_SHADER, "\nFragment Shader compilation failed..."),
+		std::make_tuple(tShaderFile, GL_TESS_CONTROL_SHADER,"\nTessellation Shader compilation failed..."),
+		std::make_tuple(gShaderFile, GL_GEOMETRY_SHADER, "\nGeometry Shader compilation failed...")
+	};
+
+	return shaders;
+}
+
+void load_shader_text(const char* shader_file, GLuint &vertexShader)
 {
 	string shaderProgramText;
 
@@ -24,12 +39,12 @@ void load_shader(const char* shader_file, GLuint &vertexShader)
 	}
 }
 
-void check_load_status(GLuint &shader)
+void check_load_status(const GLuint &shader)
 {
 	check_load_status(shader, "Shader Compilation has Failed...");
 }
 
-void check_load_status(GLuint &shader, string fail_message)
+void check_load_status(const GLuint &shader, const string fail_message)
 {
 	GLint status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -44,7 +59,19 @@ void check_load_status(GLuint &shader, string fail_message)
 		cout << infoLog[i];
 }
 
-void check_link_status(GLuint program)
+void load_shader(const char* shader_file, GLuint shader, GLuint program)
+{
+	load_shader(shader_file, shader, program, "");
+}
+
+void load_shader(const char* shader_file, GLuint shader, GLuint program, const string fail_message)
+{
+	load_shader_text(shader_file, shader);
+	check_load_status(shader, fail_message);
+	glAttachShader(program, shader);
+}
+
+void check_link_status(const GLuint program)
 {
 	GLint link_status;
 	glGetProgramiv(program, GL_LINK_STATUS, &link_status);
@@ -54,28 +81,17 @@ void check_link_status(GLuint program)
 
 GLuint LoadShaders(ShaderInfo shaderInfo)
 {
-	GLuint program;
-	GLuint vertexShader;
-	GLuint fragmentShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);	 // create a vertex shader object
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // create a fragment shader object
+	GLuint program = glCreateProgram();
 
-	// load and compile vertex shader
-	load_shader(shaderInfo.vShaderFile, vertexShader);
-	check_load_status(vertexShader, "\nVertex Shader compilation failed...");
-	
-	// load and compile fragment shader
-	load_shader(shaderInfo.fShaderFile, fragmentShader);
-	check_load_status(fragmentShader, "\nFragment Shader compilation failed...");
+	for (auto shader : shaderInfo.getShaders())
+	{
+		if (std::get<0>(shader) != NULL) // File is given
+		{
+			GLuint shader_type = glCreateShader(std::get<1>(shader));
+			load_shader(std::get<0>(shader), shader_type, program, std::get<2>(shader));
+		}
+	}
 
-	// create the shader program
-	program = glCreateProgram();
-
-	// attach the vertex and fragment shaders to the program
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
-
-	// link the objects for an executable program
 	glLinkProgram(program);
 
 	check_link_status(program);

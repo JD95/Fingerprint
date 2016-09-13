@@ -141,7 +141,7 @@ void RunGame()
 
 	ArrayBufferObject<2> verts(vbo.getID(0), vertices);
 
-	ShaderInfo info("triangles.vert", "triangles.frag");
+	ShaderInfo info("triangles.vert", "triangles.frag", NULL, NULL);
 	GLuint program = LoadShaders(info);
 	glUseProgram(program);
 
