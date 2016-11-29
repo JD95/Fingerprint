@@ -5,62 +5,79 @@
 #include <array>
 #include <GL/glew.h>
 
+#include "Checks.h"
+#include "Type_Utitilies.h"
+
 using std::vector;
 using std::array;
 
 /*
 	Manages the lifetime of many buffer objects
 */
-template <int n>
-class VboManager
+template <class ...T>
+class BufferObjectCollection
 {
 private:
-	GLuint idArray[n];
+	static constexpr int slot_size = sizeof...(T);
+	GLuint idArray[slot_size];
 
 public:
-	VboManager()
+	BufferObjectCollection()
 	{
-		glGenBuffers(n, idArray);
+		glGenBuffers(slot_size, idArray);
 	}
 
-	~VboManager()
+	~BufferObjectCollection()
 	{
-		glDeleteBuffers(n, idArray);
+		glDeleteBuffers(slot_size, idArray);
 	}
 
-	GLuint getID(const int index)
+	template <int index = 0, class = std::enable_if_t<within_range(index, 0, slot_size)>>
+	GLuint get_id() const
 	{
 		return idArray[index];
 	}
 
+	template <int index, class T = type_index<index, T...>::type>
+	auto get_vbo() -> T
+	{
+		return std::move(T(get_id<index>()));
+	}
 };
 
+enum BufferType { 
+	Array = GL_ARRAY_BUFFER
+};
+
+enum BufferUsage {
+	Static_Draw = GL_STATIC_DRAW
+};
 
 /*
 	Binds an ArrayBuffer and passes array values to GPU
 */
-template <int n>
-class ArrayBufferObject
+template <BufferType t, int col_size, BufferUsage u>
+class BufferObject
 {
 	GLuint id;
 public:
-	ArrayBufferObject(const GLuint id) 
+	BufferObject(const GLuint id)
 	{
 		this->id = id;
-		glBindBuffer(GL_ARRAY_BUFFER, id);
+		glBindBuffer(t, id);
 	}
 
-	ArrayBufferObject(const GLuint id, const vector<array<GLfloat, n>> &data)
+	BufferObject(const GLuint id, const vector<array<GLfloat, col_size>> &data)
 	{
 		this->id = id;
-		glBindBuffer(GL_ARRAY_BUFFER, id);
-		setArrayBufferData(data);
+		glBindBuffer(t, id);
+		setBufferData(data);
 	}
 
-	~ArrayBufferObject() {}
+	~BufferObject() {}
 
-	void setArrayBufferData(const vector<array<GLfloat,n>> &data)
+	void setBufferData(const vector<array<GLfloat, col_size>> &data)
 	{
-		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(GLfloat) * n, &data[0], GL_STATIC_DRAW);
+		glBufferData(t, data.size() * sizeof(GLfloat) * col_size, &data[0], u);
 	}
 };

@@ -11,6 +11,10 @@
 #include "VertexBufferObjects.h"
 
 #include "LoadShader.h"
+
+#include "PhysicsTesting.h"
+#include <fstream>
+
 std::string programName = "Headerphile SDL2 - OpenGL thing";
 
 // Our SDL_Window ( just like with SDL2 wihout OpenGL)
@@ -89,7 +93,7 @@ bool SetOpenGLAttributes()
 	return true;
 }
 
-int main(int argc, char *argv[])
+int game()
 {
 	if (!SDL_Init())
 		return -1;
@@ -110,11 +114,19 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+int main(int argc, char *argv[])
+{
+	physics_tests();
+	//return game();
+	system("pause");
+	return 0;
+}
+
 
 template <int n>
-void display(VaoManager<n> &vao_manager, vector<array<GLfloat, 2>> verts) {
+void display(VertexArrayObject<n> &vao, vector<array<GLfloat, 2>> verts) {
 	glClear(GL_COLOR_BUFFER_BIT);
-	VertexArrayObject vao(vao_manager.getID(0));
+	vao.bind();
 	glDrawArrays(GL_TRIANGLES, 0, verts.size());
 	glFlush();
 }
@@ -124,33 +136,33 @@ void RunGame()
 {
 	bool loop = true;
 
-	VaoManager<1> vao_manager;
+	VertexArrayObject<1> vao;
+	vao.bind<0>();
 
-	VertexArrayObject vao(vao_manager.getID(0));
+	vector<array<GLfloat, 2>> vertices =
+	{ { -0.90f, -0.90f } // Triangle 1 
+		,{ 0.85f, -0.90f }
+		,{ -0.90f, 0.85f }
+		,{ 0.90f, -0.85f } // Triangle 2 
+		,{ 0.90f, 0.90f }
+		,{ -0.85f, 0.90f }
+	};
 
-	vector<array<GLfloat,2>> vertices = 
-		{ { -0.90f, -0.90f } // Triangle 1 
-		, { 0.85f, -0.90f } 
-		, { -0.90f, 0.85f }
-		, { 0.90f, -0.85f } // Triangle 2 
-		, { 0.90f, 0.90f  } 
-		, { -0.85f, 0.90f } 
-		};
-	
-	VboManager<1> vbo;
+	BufferObjectCollection<BufferObject<BufferType::Array, 2, BufferUsage::Static_Draw>> vbo;
 
-	ArrayBufferObject<2> verts(vbo.getID(0), vertices);
+	auto verts = vbo.get_vbo<0>();
+	verts.setBufferData(vertices);
 
 	ShaderInfo info("triangles.vert", "triangles.frag", NULL, NULL);
 	GLuint program = LoadShaders(info);
 	glUseProgram(program);
 
-	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0)); 
+	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vPosition);
 
 	while (loop)
 	{
-		display<1>(vao_manager, vertices);
+		display<1>(vao, vertices);
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
@@ -164,8 +176,7 @@ void RunGame()
 				case SDLK_ESCAPE:
 					loop = false;
 					break;
-				default:
-					break;
+				default: break;
 				}
 			}
 		}

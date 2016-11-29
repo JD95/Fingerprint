@@ -13,7 +13,6 @@
 #include <string>
 #include <vector>
 #include <tuple>
-using namespace std;
 
 #include <GL\glew.h>
 
@@ -40,16 +39,12 @@ struct ShaderInfo {
 
 void load_shader_text(const char * shader_file, GLuint & vertexShader);
 
-void check_load_status(const GLuint & shader);
+void check_load_status(const GLuint shader, const std::string fail_message);
 
-void check_load_status(const GLuint & shader, const string fail_message);
-
-void load_shader(const char * shader_file, GLuint shader, GLuint program);
-
-void load_shader(const char * shader_file, GLuint shader, GLuint program, const string fail_message);
+void load_shader(const char * shader_file, GLuint shader, GLuint program, const std::string fail_message);
 
 void check_link_status(const GLuint program);
 
 GLuint LoadShaders(ShaderInfo shaderInfo);
 
-const char* getShaderProgram(const char *filePath, string &shaderProgramText);
+const char* getShaderProgram(const char *filePath, std::string &shaderProgramText);

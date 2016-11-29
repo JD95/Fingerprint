@@ -1,39 +1,38 @@
 #pragma once
 
 #include <GL\glew.h>
+#include "Checks.h"
 
-template <int n> class VaoManager
+/*
+	Manages the lifetime of a Vertex Array Object.
+	These objects hold the geometry information for a
+	given model.
+*/
+template <int n> class VertexArrayObject
 {
 	GLuint ids[n];
 
 public:
 
-	VaoManager()
+	VertexArrayObject()
 	{
 		glGenVertexArrays(n, ids);
 	}
 
-	~VaoManager()
+	~VertexArrayObject()
 	{
 		glDeleteVertexArrays(n, ids);
 	}
 
-	GLuint getID(const int index)
+	template <int index = 0, class = std::enable_if_t<within_range(index, 0, n)>>
+	GLuint getID() const
 	{
 		return ids[index];
 	}
 
-};
-
-
-class VertexArrayObject
-{
-	GLuint id;
-
-public:
-	VertexArrayObject(GLuint id)
+	template <int index = 0, class = std::enable_if_t<within_range(index, 0, n)>>
+	void bind()
 	{
-		this->id = id;
-		glBindVertexArray(id);
+		glBindVertexArray(ids[index]);
 	}
 };

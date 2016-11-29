@@ -81,7 +81,7 @@
     <Link>
       <AdditionalLibraryDirectories>E:\Programming Libraries\Cpp\GLEW\2.0.0\lib\Release\x86;E:\Programming Libraries\Cpp\SDL2\2.0.4\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;opengl32.lib;SDL2main.lib;SDL2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,11 +120,20 @@
   <ItemGroup>
     <ClCompile Include="LoadShader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PhysicsTesting.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Checks.h" />
+    <ClInclude Include="Position2D.h" />
     <ClInclude Include="LoadShader.h" />
+    <ClInclude Include="PhysicsBody.h" />
+    <ClInclude Include="PhysicsTesting.h" />
+    <ClInclude Include="Type_Utitilies.h" />
+    <ClInclude Include="Units.h" />
     <ClInclude Include="VertexArrayObject.h" />
     <ClInclude Include="VertexBufferObjects.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="triangles.frag" />
