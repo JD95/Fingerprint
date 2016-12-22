@@ -9,6 +9,7 @@
 
 #include "VertexArrayObject.h"
 #include "VertexBufferObjects.h"
+#include "Shader.h"
 
 #include "LoadShader.h"
 
@@ -40,8 +41,7 @@ class Window {
 
 	void PrintSDL_GL_Attributes();
 
-	template <int n>
-	void display(VertexArrayObject<n> &vao, vector<array<GLfloat, 2>> verts);
+	void display(const Shader& shader, size_t vector_size);
 
 	void RunGame();
 

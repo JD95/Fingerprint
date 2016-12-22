@@ -70,11 +70,9 @@ bool Window::SetOpenGLAttributes()
 	return true;
 }
 
-template <int n>
-void Window::display(VertexArrayObject<n> &vao, vector<array<GLfloat, 2>> verts) {
+void Window::display(const Shader& shader, size_t vector_size) {
 	glClear(GL_COLOR_BUFFER_BIT);
-	vao.bind();
-	glDrawArrays(GL_TRIANGLES, 0, verts.size());
+	shader.render_object(0, vector_size);
 	glFlush();
 }
 
@@ -120,23 +118,19 @@ void Window::RunGame()
 	};
 
 	BufferObjectCollection<
-		BufferObject<BufferType::Array, 2,
-		BufferUsage::Static_Draw>
+		BufferObject<
+			BufferType::Array, 2,
+			BufferUsage::Static_Draw>
 	> vbo;
 
 	auto verts = vbo.get_vbo<0>();
 	verts.setBufferData(vertices);
 
-	ShaderInfo info("triangles.vert", "triangles.frag", NULL, NULL);
-	GLuint program = LoadShaders(info);
-	glUseProgram(program);
-
-	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(vPosition);
+	Shader shader("triangles.vert", "triangles.frag", NULL, NULL);
 
 	while (loop)
 	{
-		display<1>(vao, vertices);
+		display(shader, vertices.size());
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
