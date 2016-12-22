@@ -1,12 +1,6 @@
-#include "Triangles.h"
+#include "Polygon.h"
 
 
-
-Triangles::Triangles()
-{
-}
-
-
-Triangles::~Triangles()
+Polygon::~Polygon()
 {
 }

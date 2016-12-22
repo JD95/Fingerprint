@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Polygon.h"
 
 Window::Window()
 {
@@ -99,28 +100,35 @@ void Window::RunGame()
 {
 	bool loop = true;
 
-	vector<array<GLfloat, 2>> vertices =
-	{ { -0.90f, -0.90f } // Triangle 1 
-		,{ 0.85f, -0.90f }
-		,{ -0.90f, 0.85f }
-		,{ 0.90f, -0.85f } // Triangle 2 
-		,{ 0.90f, 0.90f }
-		,{ -0.85f, 0.90f }
-	};
+	//vector<array<GLfloat, 2>> vertices =
+	//{ { -0.90f, -0.90f } // Triangle 1 
+	//	,{ 0.85f, -0.90f }
+	//	,{ -0.90f, 0.85f }
+	//	,{ 0.90f, -0.85f } // Triangle 2 
+	//	,{ 0.90f, 0.90f }
+	//	,{ -0.85f, 0.90f }
+	//};
 
-	VertexArrayObject<Basic2dCoords> model;
-	model.bind();
+	//VertexArrayObject<Basic2dCoords> model;
+	//model.bind();
 
-	auto verts = model.use_vbo<0>();
-	verts.setBufferData(vertices);
+	//auto verts = model.use_vbo<0>();
+	//verts.setBufferData(vertices);
 
-	BasicShader shader({ "triangles.vert", "triangles.frag", NULL, NULL });
+	//BasicShader shader({ "triangles.vert", "triangles.frag", NULL, NULL });
+
+	Polygon shape({
+		Coords<2>{ 0.0f, 0.90f },
+		Coords<2>{ 0.90f, -0.90f },
+		Coords<2>{ -0.90f, -0.90f }
+	});
 
 	while (loop)
 	{
 		// Draw triangles
 		glClear(GL_COLOR_BUFFER_BIT);
-		shader.render_object(vertices.size());
+		//shader.render_object(vertices.size());
+		shape.render();
 		glFlush();
 
 		// Handle SDL events

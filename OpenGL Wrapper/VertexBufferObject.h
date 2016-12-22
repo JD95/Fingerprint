@@ -11,6 +11,9 @@
 using std::vector;
 using std::array;
 
+template <int N>
+using Coords = std::array<GLfloat, N>;
+
 enum BufferType { 
 	Array = GL_ARRAY_BUFFER
 };
@@ -33,7 +36,7 @@ public:
 		glBindBuffer(t, id);
 	}
 
-	BufferObject(const GLuint id, const vector<array<GLfloat, col_size>> &data)
+	BufferObject(const GLuint id, const vector<Coords<col_size>> &data)
 	{
 		this->id = id;
 		glBindBuffer(t, id);
@@ -42,7 +45,7 @@ public:
 
 	~BufferObject() {}
 
-	void setBufferData(const vector<array<GLfloat, col_size>> &data)
+	void setBufferData(const vector<Coords<col_size>> &data)
 	{
 		glBufferData(t, data.size() * sizeof(GLfloat) * col_size, &data[0], u);
 	}

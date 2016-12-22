@@ -131,7 +131,7 @@
     <ClInclude Include="PhysicsBody.h" />
     <ClInclude Include="PhysicsTesting.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="Triangles.h" />
+    <ClInclude Include="Polygon.h" />
     <ClInclude Include="Type_Utitilies.h" />
     <ClInclude Include="Uniform.h" />
     <ClInclude Include="Units.h" />

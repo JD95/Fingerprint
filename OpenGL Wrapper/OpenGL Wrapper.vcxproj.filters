@@ -77,10 +77,10 @@
     <ClInclude Include="Uniform.h">
       <Filter>Header Files\UniformVariables</Filter>
     </ClInclude>
-    <ClInclude Include="Triangles.h">
+    <ClInclude Include="VertexBufferObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VertexBufferObject.h">
+    <ClInclude Include="Polygon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
