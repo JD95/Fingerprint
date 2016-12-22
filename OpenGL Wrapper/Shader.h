@@ -24,11 +24,11 @@ protected:
 		return (void *)(offset);
 	}
 
-	GLuint id;
+	GLuint program;
 	ShaderInfo info;
 
 	void activate_shader(const int index) const {
-		glUseProgram(id);
+		glUseProgram(program);
 		glVertexAttribPointer(index, 2, GL_FLOAT, GL_FALSE, 0, buffer_offset(0));
 		glEnableVertexAttribArray(index);
 	}
@@ -42,7 +42,7 @@ public:
 	BasicShader(ShaderLocations sl)
 		: info(sl.vert, sl.frag, sl.tess, sl.geo)
 	{
-		id = LoadShaders(info);
+		program = LoadShaders(info);
 	};
 
 	~BasicShader() {};
@@ -66,7 +66,7 @@ public:
 	Shader(ShaderLocations sl, UniformsInit f)
 		: BasicShader(sl)
 	{
-		uniform_variables = f(id);
+		uniform_variables = f(program);
 	};
 
 	~Shader() {};
