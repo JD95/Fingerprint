@@ -39,7 +39,7 @@ public:
 	}
 
 	template <int index, class T = type_index<index, T...>::type>
-	auto get_vbo() -> T
+	auto use_vbo() -> T
 	{
 		return std::move(T(get_id<index>()));
 	}

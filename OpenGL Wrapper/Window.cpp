@@ -117,7 +117,7 @@ void Window::RunGame()
 			BufferUsage::Static_Draw>
 	> vbo;
 
-	auto verts = vbo.get_vbo<0>();
+	auto verts = vbo.use_vbo<0>();
 	verts.setBufferData(vertices);
 
 	BasicShader shader({ "triangles.vert", "triangles.frag", NULL, NULL });
