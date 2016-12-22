@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{296eef8e-deae-4467-979d-41aa74b286b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UniformVariables">
+      <UniqueIdentifier>{a168bb9e-4ad6-4d1b-9dee-7cb52acf23d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,7 +78,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Uniform.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UniformVariables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
