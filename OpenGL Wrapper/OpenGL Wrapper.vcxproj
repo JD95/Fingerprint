@@ -69,14 +69,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\Programming Libraries\Cpp\GLEW\2.0.0\include;E:\Programming Libraries\Cpp\SDL2\2.0.4\include;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming Libraries\Cpp\GLM\glm\glm;E:\Programming Libraries\Cpp\GLEW\2.0.0\include;E:\Programming Libraries\Cpp\SDL2\2.0.4\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\Programming Libraries\Cpp\GLEW\2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Programming Libraries\Cpp\GLM\glm\;E:\Programming Libraries\Cpp\GLEW\2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>E:\Programming Libraries\Cpp\GLEW\2.0.0\lib\Release\x86;E:\Programming Libraries\Cpp\SDL2\2.0.4\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

@@ -4,7 +4,7 @@
 #include <tuple>
 #include "Type_Utitilies.h"
 #include "Checks.h"
-
+#include "glm\mat4x4.hpp"
 
 /*
 	The classes defined here are helpers for managing variables which
@@ -19,7 +19,7 @@ class Uniform
 	template <int n> struct set_uniforms_impl {
 		template<class Ts, class Vs>
 		void operator() (Ts& uniforms, Vs& values) {
-			std::get<n>(uniforms)(std::get<n>(values));
+			std::get<n-1>(uniforms)(std::get<n-1>(values));
 			set_uniforms_impl<n - 1>()(uniforms, values);
 		}
 	};
@@ -40,7 +40,7 @@ public:
 	// Sets the values for all uniform variables in a tuple
 	template <class Ts, class Vs>
 	static void set_values(Ts& uniforms, Vs& values) {
-		set_uniforms_impl<std::tuple_size<Ts>::value - 1>()(uniforms, values);
+		set_uniforms_impl<std::tuple_size<Ts>::value>()(uniforms, values);
 	}
 };
 
@@ -65,5 +65,13 @@ struct UniformDouble : public Uniform {
 	UniformDouble(GLint location) : Uniform(location) {};
 	void operator() (const GLdouble& value) const {
 		glUniform1d(location, value);
+	}
+};
+
+// Manages setting the value of a 4x4 Matrix
+struct UniformMat4 : public Uniform {
+	UniformMat4(GLint location) : Uniform(location) {};
+	void operator() (const glm::mat4& value) const {
+		glUniformMatrix4fv(location, 1, false, &value[0][0]);
 	}
 };

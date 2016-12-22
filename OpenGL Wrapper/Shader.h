@@ -40,13 +40,13 @@ protected:
 		glEnableVertexAttribArray(1);
 	}
 
-	void draw_object(size_t object_size) const {
+	void draw_object(const size_t& object_size) const {
 		glDrawArrays(GL_TRIANGLES, 0, object_size);
 	}
 
 public:
 
-	BasicShader(ShaderLocations sl)
+	BasicShader(ShaderLocations&& sl)
 		: info(sl.vert, sl.frag, sl.tess, sl.geo)
 	{
 		program = LoadShaders(info);
@@ -54,7 +54,7 @@ public:
 
 	~BasicShader() {};
 
-	void render_object(size_t object_size) const {
+	void render_object(const size_t& object_size) const {
 		activate_shader();
 		draw_object(object_size);
 	};
@@ -70,7 +70,7 @@ class Shader : BasicShader
 public:
 
 	template<class UniformsInit>
-	Shader(ShaderLocations sl, UniformsInit f)
+	Shader(ShaderLocations&& sl, UniformsInit f)
 		: BasicShader(sl)
 	{
 		uniform_variables = f(program);
@@ -79,9 +79,9 @@ public:
 	~Shader() {};
 
 	template <class ...Vs>
-	void render_object(size_t object_size, Vs&... values) const {
+	void render_object(const size_t& object_size, Vs&&... values) const {
 		activate_shader();
-		Uniform::set_values(uniform_variables, values...);
+		Uniform::set_values(uniform_variables, std::forward(values)...);
 		draw_object(object_size);
 	};
 };
