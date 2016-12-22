@@ -21,7 +21,7 @@ using std::array;
 
 class Window {
 
-	std::string programName = "Headerphile SDL2 - OpenGL thing";
+	std::string programName = "Fingerprint Engine - Super Alpha";
 
 	// Our SDL_Window ( just like with SDL2 wihout OpenGL)
 	SDL_Window *mainWindow;
@@ -40,8 +40,6 @@ class Window {
 	void CheckSDLError(int line = -1);
 
 	void PrintSDL_GL_Attributes();
-
-	void display(const Shader& shader, size_t vector_size);
 
 	void RunGame();
 

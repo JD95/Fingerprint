@@ -70,12 +70,6 @@ bool Window::SetOpenGLAttributes()
 	return true;
 }
 
-void Window::display(const Shader& shader, size_t vector_size) {
-	glClear(GL_COLOR_BUFFER_BIT);
-	shader.render_object(0, vector_size);
-	glFlush();
-}
-
 void Window::CheckSDLError(int line)
 {
 	std::string error = SDL_GetError();
@@ -126,11 +120,16 @@ void Window::RunGame()
 	auto verts = vbo.get_vbo<0>();
 	verts.setBufferData(vertices);
 
-	Shader shader("triangles.vert", "triangles.frag", NULL, NULL);
+	BasicShader shader({ "triangles.vert", "triangles.frag", NULL, NULL });
 
 	while (loop)
 	{
-		display(shader, vertices.size());
+		// Draw triangles
+		glClear(GL_COLOR_BUFFER_BIT);
+		shader.render_object(0, vertices.size());
+		glFlush();
+
+		// Handle SDL events
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
