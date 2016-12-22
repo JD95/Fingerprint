@@ -99,9 +99,6 @@ void Window::RunGame()
 {
 	bool loop = true;
 
-	VertexArrayObject<1> vao;
-	vao.bind<0>();
-
 	vector<array<GLfloat, 2>> vertices =
 	{ { -0.90f, -0.90f } // Triangle 1 
 		,{ 0.85f, -0.90f }
@@ -111,13 +108,10 @@ void Window::RunGame()
 		,{ -0.85f, 0.90f }
 	};
 
-	BufferObjectCollection<
-		BufferObject<
-			BufferType::Array, 2,
-			BufferUsage::Static_Draw>
-	> vbo;
+	VertexArrayObject<Basic2dCoords> model;
+	model.bind();
 
-	auto verts = vbo.use_vbo<0>();
+	auto verts = model.use_vbo<0>();
 	verts.setBufferData(vertices);
 
 	BasicShader shader({ "triangles.vert", "triangles.frag", NULL, NULL });
@@ -126,7 +120,7 @@ void Window::RunGame()
 	{
 		// Draw triangles
 		glClear(GL_COLOR_BUFFER_BIT);
-		shader.render_object(0, vertices.size());
+		shader.render_object(vertices.size());
 		glFlush();
 
 		// Handle SDL events

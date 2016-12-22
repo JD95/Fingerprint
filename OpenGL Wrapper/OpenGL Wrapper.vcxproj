@@ -121,8 +121,7 @@
     <ClCompile Include="LoadShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PhysicsTesting.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Uniform.cpp" />
+    <ClCompile Include="Triangles.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,11 +131,12 @@
     <ClInclude Include="PhysicsBody.h" />
     <ClInclude Include="PhysicsTesting.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Triangles.h" />
     <ClInclude Include="Type_Utitilies.h" />
     <ClInclude Include="Uniform.h" />
     <ClInclude Include="Units.h" />
     <ClInclude Include="VertexArrayObject.h" />
-    <ClInclude Include="VertexBufferObjects.h" />
+    <ClInclude Include="VertexBufferObject.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,9 @@
     <Filter Include="Header Files\UniformVariables">
       <UniqueIdentifier>{a168bb9e-4ad6-4d1b-9dee-7cb52acf23d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Shapes">
+      <UniqueIdentifier>{e8aa1bb6-9937-403e-a04d-d934ce937119}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,10 +39,7 @@
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Uniform.cpp">
+    <ClCompile Include="Triangles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,9 +48,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LoadShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBufferObjects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Checks.h">
@@ -79,6 +76,12 @@
     </ClInclude>
     <ClInclude Include="Uniform.h">
       <Filter>Header Files\UniformVariables</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferObject.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

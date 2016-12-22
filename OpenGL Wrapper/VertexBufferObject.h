@@ -11,40 +11,6 @@
 using std::vector;
 using std::array;
 
-/*
-	Manages the lifetime of many buffer objects
-*/
-template <class ...T>
-class BufferObjectCollection
-{
-private:
-	static constexpr int slot_size = sizeof...(T);
-	GLuint idArray[slot_size];
-
-public:
-	BufferObjectCollection()
-	{
-		glGenBuffers(slot_size, idArray);
-	}
-
-	~BufferObjectCollection()
-	{
-		glDeleteBuffers(slot_size, idArray);
-	}
-
-	template <int index = 0, class = std::enable_if_t<within_range(index, 0, slot_size)>>
-	GLuint get_id() const
-	{
-		return idArray[index];
-	}
-
-	template <int index, class T = type_index<index, T...>::type>
-	auto use_vbo() -> T
-	{
-		return std::move(T(get_id<index>()));
-	}
-};
-
 enum BufferType { 
 	Array = GL_ARRAY_BUFFER
 };
@@ -81,3 +47,5 @@ public:
 		glBufferData(t, data.size() * sizeof(GLfloat) * col_size, &data[0], u);
 	}
 };
+
+using Basic2dCoords = BufferObject<Array, 2, Static_Draw>;

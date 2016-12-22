@@ -27,10 +27,17 @@ protected:
 	GLuint program;
 	ShaderInfo info;
 
-	void activate_shader(const int index) const {
+	void activate_shader() const {
+		// Binds the current shader
 		glUseProgram(program);
-		glVertexAttribPointer(index, 2, GL_FLOAT, GL_FALSE, 0, buffer_offset(0));
-		glEnableVertexAttribArray(index);
+
+		// Sets up pipe for vertex data to be sent to the shader
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, buffer_offset(0));
+		glEnableVertexAttribArray(0);
+
+		// Sets up pipe for color data to be sent to the shader
+		glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, buffer_offset(0));
+		glEnableVertexAttribArray(1);
 	}
 
 	void draw_object(size_t object_size) const {
@@ -47,8 +54,8 @@ public:
 
 	~BasicShader() {};
 
-	void render_object(const int index, size_t object_size) const {
-		activate_shader(index);
+	void render_object(size_t object_size) const {
+		activate_shader();
 		draw_object(object_size);
 	};
 };
@@ -72,8 +79,8 @@ public:
 	~Shader() {};
 
 	template <class ...Vs>
-	void render_object(const int index, size_t object_size, Vs&... values) const {
-		activate_shader(index);
+	void render_object(size_t object_size, Vs&... values) const {
+		activate_shader();
 		Uniform::set_values(uniform_variables, values...);
 		draw_object(object_size);
 	};

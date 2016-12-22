@@ -8,7 +8,7 @@
 #include <SDL.h>
 
 #include "VertexArrayObject.h"
-#include "VertexBufferObjects.h"
+#include "VertexBufferObject.h"
 #include "Shader.h"
 
 #include "LoadShader.h"
