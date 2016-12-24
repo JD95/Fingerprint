@@ -11,14 +11,17 @@
 class Polygon
 {
 	VertexArrayObject<Basic2dCoords> model;
-	BasicShader shader;
+	Shader<UniformUint> shader;
 
 	std::vector<VertexData2D> vertices;
 
 public:
 	Polygon(std::vector<VertexData2D> vs)
 		: vertices(vs)
-		, shader({ "triangles.vert", "triangles.frag", NULL, NULL })
+		, shader({ "triangles.vert", "triangles.frag", NULL, NULL }, 
+			[](GLuint program) { return std::make_tuple(
+				UniformUint(glGetUniformLocation(program, "test"))
+			);})
 	{
 		model.bind();
 		model.use_vbo<0>().setBufferData(vertices);
@@ -28,7 +31,7 @@ public:
 
 	void render() {
 		model.bind();
-		shader.render_object(0, 1, vertices.size());
+		shader.render_object(0, 1, GL_TRIANGLES, vertices.size(), 255);
 	}
 };
 

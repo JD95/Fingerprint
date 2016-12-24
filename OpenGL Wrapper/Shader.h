@@ -28,6 +28,7 @@ protected:
 	GLuint program;
 	ShaderInfo info;
 
+	// TODO: Generalize this process, allow for different VBOs to be used
 	void activate_shader(const GLuint vecLoc, const GLuint colorLoc) const {
 		// Binds the current shader
 		glUseProgram(program);
@@ -41,6 +42,7 @@ protected:
 			To make things easier, we will be using a single struct to pass all
 			of the relevant information and just tell OpenGL how to interperate
 			the struct for what it needs.
+
 		*/
 
 		// Sets up pipe for vertex data to be sent to the shader
@@ -52,8 +54,9 @@ protected:
 		glEnableVertexAttribArray(colorLoc);
 	}
 
-	void draw_object(const size_t& object_size) const {
-		glDrawArrays(GL_TRIANGLES, 0, object_size);
+	// TODO: Allow for draw settings to be customized
+	void draw_object(const int draw_style, const size_t& object_size) const {
+		glDrawArrays(draw_style, 0, object_size);
 	}
 
 public:
@@ -66,9 +69,9 @@ public:
 
 	~BasicShader() {};
 
-	void render_object(const GLuint vecLoc, const GLuint colorLoc, const size_t& object_size) const {
+	void render_object(const GLuint vecLoc, const GLuint colorLoc, const int draw_style, const size_t& object_size) const {
 		activate_shader(vecLoc, colorLoc);
-		draw_object(object_size);
+		draw_object(draw_style, object_size);
 	};
 };
 
@@ -83,18 +86,18 @@ public:
 
 	template<class UniformsInit>
 	Shader(ShaderLocations&& sl, UniformsInit f)
-		: BasicShader(sl)
+		: BasicShader(std::forward<ShaderLocations>(sl))
+		, uniform_variables(f(program))
 	{
-		uniform_variables = f(program);
 	};
 
 	~Shader() {};
 
 	template <class ...Vs>
-	void render_object(const GLuint vecLoc, const GLuint colorLoc, const size_t& object_size, Vs&&... values) const {
+	void render_object(const GLuint& vecLoc, const GLuint& colorLoc, const int draw_style, const size_t& object_size, Vs&&... values) const {
 		activate_shader(vecLoc, colorLoc);
-		Uniform::set_values(uniform_variables, std::forward(values)...);
-		draw_object(object_size);
+		Uniform::set_values(uniform_variables, std::make_tuple(std::forward<Vs>(values)...));
+		draw_object(draw_style, object_size);
 	};
 };
 

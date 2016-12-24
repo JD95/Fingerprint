@@ -52,6 +52,15 @@ struct UniformInt : public Uniform {
 	}
 };
 
+// Manages setting the value of an integer
+struct UniformUint : public Uniform {
+	UniformUint(GLuint location) : Uniform(location) {};
+	void operator() (const GLuint& value) const {
+		glUniform1ui(location, value);
+	}
+
+};
+
 // Manages setting the value of a float
 struct UniformFloat : public Uniform {
 	UniformFloat(GLint location) : Uniform(location) {};
