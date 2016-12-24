@@ -7,12 +7,10 @@
 
 #include "Checks.h"
 #include "Type_Utitilies.h"
+#include "VertexData.h"
 
 using std::vector;
 using std::array;
-
-template <int N>
-using Coords = std::array<GLfloat, N>;
 
 enum BufferType { 
 	Array = GL_ARRAY_BUFFER
@@ -25,7 +23,7 @@ enum BufferUsage {
 /*
 	Binds an ArrayBuffer and passes array values to GPU
 */
-template <BufferType t, int col_size, BufferUsage u>
+template <BufferType t, BufferUsage u>
 class BufferObject
 {
 	GLuint id;
@@ -36,7 +34,7 @@ public:
 		glBindBuffer(t, id);
 	}
 
-	BufferObject(const GLuint id, const vector<Coords<col_size>> &data)
+	BufferObject(const GLuint id, const vector<VertexData2D> &data)
 	{
 		this->id = id;
 		glBindBuffer(t, id);
@@ -45,10 +43,15 @@ public:
 
 	~BufferObject() {}
 
-	void setBufferData(const vector<Coords<col_size>> &data)
+	void setBufferData(const vector<VertexData2D> &data)
 	{
-		glBufferData(t, data.size() * sizeof(GLfloat) * col_size, &data[0], u);
+		glBufferData(t, data.size() * sizeof(VertexData2D), &data[0], u);
 	}
+
+	GLuint get_id() const { return id; }
 };
 
-using Basic2dCoords = BufferObject<Array, 2, Static_Draw>;
+
+using RgbaCoords = BufferObject<Array, Static_Draw>;
+using Basic2dCoords = BufferObject<Array, Static_Draw>;
+using BasicArray = BufferObject<Array, Static_Draw>;

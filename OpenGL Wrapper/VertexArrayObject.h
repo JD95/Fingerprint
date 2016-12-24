@@ -14,17 +14,12 @@ template <class ...T> class VertexArrayObject
 	static constexpr int num_vbos = sizeof...(T);
 	GLuint vbo_ids[num_vbos];
 
-	template <int index = 0, class = std::enable_if_t<within_range(index, 0, num_vbos)>>
-	GLuint get_id() const
-	{
-		return vbo_ids[index];
-	}
-
 public:
 
 	VertexArrayObject()
 	{
 		glGenVertexArrays(1, &vao_id);
+		glGenBuffers(num_vbos, vbo_ids);
 	}
 
 	~VertexArrayObject()
@@ -41,5 +36,11 @@ public:
 	auto use_vbo() -> T
 	{
 		return std::move(T(get_id<index>()));
+	}
+
+	template <int index = 0, class = std::enable_if_t<within_range(index, 0, num_vbos)>>
+	GLuint get_id() const
+	{
+		return vbo_ids[index];
 	}
 };

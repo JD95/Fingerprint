@@ -122,6 +122,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PhysicsTesting.cpp" />
     <ClCompile Include="Triangles.cpp" />
+    <ClCompile Include="VertexData.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +138,7 @@
     <ClInclude Include="Units.h" />
     <ClInclude Include="VertexArrayObject.h" />
     <ClInclude Include="VertexBufferObject.h" />
+    <ClInclude Include="VertexData.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

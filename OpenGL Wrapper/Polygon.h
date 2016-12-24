@@ -13,24 +13,22 @@ class Polygon
 	VertexArrayObject<Basic2dCoords> model;
 	BasicShader shader;
 
-	std::vector<Coords<2>> vertices;
+	std::vector<VertexData2D> vertices;
 
 public:
-	template <class ...Ts>
-	Polygon(Ts&&... vs) 
-		: vertices({ std::forward<Ts>(vs)... })
+	Polygon(std::vector<VertexData2D> vs)
+		: vertices(vs)
 		, shader({ "triangles.vert", "triangles.frag", NULL, NULL })
 	{
 		model.bind();
-		auto verts = model.use_vbo<0>();
-		verts.setBufferData(vertices);
+		model.use_vbo<0>().setBufferData(vertices);
 	}
 
 	~Polygon();
 
 	void render() {
 		model.bind();
-		shader.render_object(vertices.size());
+		shader.render_object(0, 1, vertices.size());
 	}
 };
 

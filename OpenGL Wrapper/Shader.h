@@ -6,6 +6,7 @@
 #include "VertexArrayObject.h"
 #include "LoadShader.h"
 #include "Uniform.h"
+#include "VertexData.h"
 #include <tuple>
 
 
@@ -27,17 +28,28 @@ protected:
 	GLuint program;
 	ShaderInfo info;
 
-	void activate_shader() const {
+	void activate_shader(const GLuint vecLoc, const GLuint colorLoc) const {
 		// Binds the current shader
 		glUseProgram(program);
 
+		/*  The particular buffer which will be associated with these values
+			must be bound at the time of calling the below functions.
+
+			If different buffers will be routed to the shader, then those buffers
+			need to be bound before their attributes are enabled.
+
+			To make things easier, we will be using a single struct to pass all
+			of the relevant information and just tell OpenGL how to interperate
+			the struct for what it needs.
+		*/
+
 		// Sets up pipe for vertex data to be sent to the shader
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, buffer_offset(0));
-		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(vecLoc, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData2D), buffer_offset(sizeof(RGBA)));
+		glEnableVertexAttribArray(vecLoc);
 
 		// Sets up pipe for color data to be sent to the shader
-		glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, buffer_offset(0));
-		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(colorLoc, 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(VertexData2D), buffer_offset(0));
+		glEnableVertexAttribArray(colorLoc);
 	}
 
 	void draw_object(const size_t& object_size) const {
@@ -54,8 +66,8 @@ public:
 
 	~BasicShader() {};
 
-	void render_object(const size_t& object_size) const {
-		activate_shader();
+	void render_object(const GLuint vecLoc, const GLuint colorLoc, const size_t& object_size) const {
+		activate_shader(vecLoc, colorLoc);
 		draw_object(object_size);
 	};
 };
@@ -79,8 +91,8 @@ public:
 	~Shader() {};
 
 	template <class ...Vs>
-	void render_object(const size_t& object_size, Vs&&... values) const {
-		activate_shader();
+	void render_object(const GLuint vecLoc, const GLuint colorLoc, const size_t& object_size, Vs&&... values) const {
+		activate_shader(vecLoc, colorLoc);
 		Uniform::set_values(uniform_variables, std::forward(values)...);
 		draw_object(object_size);
 	};
