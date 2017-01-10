@@ -79,11 +79,11 @@ std::vector<std::pair<int, int>> gen_random_pairs(const int n)
 	return pairs;
 }
 
-void print_hilbert_grid(const int N)
+void print_hilbert_grid(const double N)
 {
 	for (int y = 0; y < N; y++) {
 		for (int x = 0; x < N; x++) {
-			std::cout << xy2d(N, x, y) << "\t";
+			std::cout << xy2d((int)N, x, y) << "\t";
 		}
 		std::cout << "\n";
 	}
@@ -91,35 +91,35 @@ void print_hilbert_grid(const int N)
 	std::cout << "\n";
 }
 
-void time_hilbert_mapping() {
-	const int N = 1024;
-	const int coords = 10000;
-	auto pairs = gen_random_pairs(coords);
-	std::chrono::high_resolution_clock clock;
-	std::vector<int> ds;
-
-	ds.reserve(coords);
-
-	auto start = clock.now();
-
-	for (auto& pair : pairs) {
-		ds.push_back(xy2d(N, pair.first, pair.second));
-	}
-
-	std::sort(ds.begin(), ds.end());
-
-	auto end = clock.now();
-
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-	std::cout << "Mapping completed in: " << duration.count() << '\n';
-
-	std::for_each(pairs.begin(), pairs.begin() + 10, [=](std::pair<int, int> pair) {
-		std::cout << "(" << pair.first << "," << pair.second << ")" << " -> ";
-		std::cout << xy2d(N, pair.first, pair.second) << '\n';
-	});
-
-	std::cout << "End" << std::endl;
-}
+//void time_hilbert_mapping() {
+//	const int N = 1024;
+//	const int coords = 10000;
+//	auto pairs = gen_random_pairs(coords);
+//	std::chrono::high_resolution_clock clock;
+//	std::vector<int> ds;
+//
+//	ds.reserve(coords);
+//
+//	auto start = clock.now();
+//
+//	for (auto& pair : pairs) {
+//		ds.push_back(xy2d(N, pair.first, pair.second));
+//	}
+//
+//	std::sort(ds.begin(), ds.end());
+//
+//	auto end = clock.now();
+//
+//	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+//	std::cout << "Mapping completed in: " << duration.count() << '\n';
+//
+//	std::for_each(pairs.begin(), pairs.begin() + 10, [=](std::pair<int, int> pair) {
+//		std::cout << "(" << pair.first << "," << pair.second << ")" << " -> ";
+//		std::cout << xy2d(N, pair.first, pair.second) << '\n';
+//	});
+//
+//	std::cout << "End" << std::endl;
+//}
 
 void physics_tests()
 {

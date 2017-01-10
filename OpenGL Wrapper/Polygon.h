@@ -7,11 +7,12 @@
 #include "Uniform.h"
 #include "VertexArrayObject.h"
 #include "VertexBufferObject.h"
+#include "Transform.h"
 
 class Polygon
 {
 	VertexArrayObject<Basic2dCoords> model;
-	Shader<UniformUint> shader;
+	Shader<UniformMat4> shader;
 
 	std::vector<VertexData2D> vertices;
 
@@ -20,7 +21,7 @@ public:
 		: vertices(vs)
 		, shader({ "triangles.vert", "triangles.frag", NULL, NULL }, 
 			[](GLuint program) { return std::make_tuple(
-				UniformUint(glGetUniformLocation(program, "test"))
+				UniformMat4(program, "modelMatrix")
 			);})
 	{
 		model.bind();
@@ -29,9 +30,10 @@ public:
 
 	~Polygon();
 
-	void render() {
+	// TODO: Pass in the MVP matrix
+	void render(Transform t) {
 		model.bind();
-		shader.render_object(0, 1, GL_TRIANGLES, vertices.size(), 255);
+		shader.render_object(0, 1, GL_TRIANGLES, vertices.size(), t.model_matrix());
 	}
 };
 

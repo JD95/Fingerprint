@@ -77,6 +77,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>E:\Programming Libraries\Cpp\GLM\glm\;E:\Programming Libraries\Cpp\GLEW\2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>E:\Programming Libraries\Cpp\GLEW\2.0.0\lib\Release\x86;E:\Programming Libraries\Cpp\SDL2\2.0.4\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -121,6 +123,7 @@
     <ClCompile Include="LoadShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PhysicsTesting.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Triangles.cpp" />
     <ClCompile Include="Uniform.cpp" />
     <ClCompile Include="VertexData.cpp" />
@@ -134,6 +137,7 @@
     <ClInclude Include="PhysicsTesting.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Polygon.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Type_Utitilies.h" />
     <ClInclude Include="Uniform.h" />
     <ClInclude Include="Units.h" />

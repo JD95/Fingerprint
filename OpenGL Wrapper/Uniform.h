@@ -34,7 +34,8 @@ protected:
 	GLint location;
 
 public:
-	Uniform(GLint l) : location(l) {};
+	Uniform(GLuint program, char* name) 
+		: location(glGetUniformLocation(program, name)) {};
 	~Uniform() {};
 
 	// Sets the values for all uniform variables in a tuple
@@ -46,7 +47,7 @@ public:
 
 // Manages setting the value of an integer
 struct UniformInt : public Uniform {
-	UniformInt(GLint location) : Uniform(location) {};
+	UniformInt(GLuint program, char* name) : Uniform(program, name) {};
 	void operator() (const GLint& value) const {
 		glUniform1i(location, value);
 	}
@@ -54,7 +55,7 @@ struct UniformInt : public Uniform {
 
 // Manages setting the value of an integer
 struct UniformUint : public Uniform {
-	UniformUint(GLuint location) : Uniform(location) {};
+	UniformUint(GLuint program, char* name) : Uniform(program, name) {};
 	void operator() (const GLuint& value) const {
 		glUniform1ui(location, value);
 	}
@@ -63,7 +64,7 @@ struct UniformUint : public Uniform {
 
 // Manages setting the value of a float
 struct UniformFloat : public Uniform {
-	UniformFloat(GLint location) : Uniform(location) {};
+	UniformFloat(GLuint program, char* name) : Uniform(program, name) {};
 	void operator() (const GLfloat& value) const {
 		glUniform1f(location, value);
 	}
@@ -71,7 +72,7 @@ struct UniformFloat : public Uniform {
 
 // Manages setting the value of a double
 struct UniformDouble : public Uniform {
-	UniformDouble(GLint location) : Uniform(location) {};
+	UniformDouble(GLuint program, char* name) : Uniform(program, name) {};
 	void operator() (const GLdouble& value) const {
 		glUniform1d(location, value);
 	}
@@ -79,7 +80,7 @@ struct UniformDouble : public Uniform {
 
 // Manages setting the value of a 4x4 Matrix
 struct UniformMat4 : public Uniform {
-	UniformMat4(GLint location) : Uniform(location) {};
+	UniformMat4(GLuint program, char* name) : Uniform(program, name) {};
 	void operator() (const glm::mat4& value) const {
 		glUniformMatrix4fv(location, 1, false, &value[0][0]);
 	}

@@ -54,7 +54,7 @@ void check_load_status(const GLuint shader, const std::string fail_message)
 	if (!(status == GL_TRUE))
 		std::cerr << fail_message << '\n';
 
-	display_info_log(shader);
+	//display_info_log(shader);
 }
 
 void load_shader(const char* shader_file, GLuint shader, GLuint program, const std::string fail_message)

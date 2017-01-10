@@ -1,5 +1,7 @@
 #include "Window.h"
 #include "Polygon.h"
+#include "Transform.h"
+#include <ctime>
 
 Window::Window()
 {
@@ -101,19 +103,30 @@ void Window::RunGame()
 	bool loop = true;
 
 	Polygon shape({
-		{{ 0, 1, 1, 255 },{ -0.90f, 0.90f }},
-		{{ 0, 1, 1, 255 },{  0.90f, -0.90f }},
-		{{ 0, 1, 1, 255 },{ -0.90f, -0.90f }},
-		{{ 0, 1, 1, 255 },{ -0.90f, 0.90f }},
-		{{ 0, 1, 1, 255 },{ 0.90f, -0.90f }},
-		{{ 0, 1, 1, 255 },{ 0.90f, 0.90f }},
+		{{ 0, 255, 0, 255 },{ -0.90f, 0.90f }},
+		{{ 0, 255, 0, 255 },{  0.90f, -0.90f }},
+		{{ 0, 255, 0, 255 },{ -0.90f, -0.90f }},
+		{{ 0, 0, 255, 255 },{ -0.90f, 0.90f }},
+		{{ 0, 0, 255, 255 },{ 0.90f, -0.90f }},
+		{{ 0, 0, 255, 255 },{ 0.90f, 0.90f }},
 	});
 
-	while (loop)
+	Transform t;
+
+	t.position = glm::vec3(0, 0.0f, 0);
+	t.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+	for (float i = 0; loop; i += 0.01f)
 	{
 		// Draw triangles
 		glClear(GL_COLOR_BUFFER_BIT);
-		shape.render();
+
+		auto delta = (float)glm::sin(i) * 0.005f;
+		t.position[0] += delta;
+		t.scale += delta;
+		t.rotation = glm::rotate(t.rotation, 0.01f, glm::vec3(0.0f, 0.0f, 1.0f));
+		
+		shape.render(t);
 		glFlush();
 
 		// Handle SDL events
@@ -142,11 +155,6 @@ int Window::game()
 {
 	if (!init) return -1;
 
-	// Clear our buffer with a black background
-	// This is the same as :
-	// 		SDL_SetRenderDrawColor(&renderer, 255, 0, 0, 255);
-	// 		SDL_RenderClear(&renderer);
-	//
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapWindow(mainWindow);

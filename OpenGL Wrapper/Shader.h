@@ -85,7 +85,7 @@ class Shader : BasicShader
 public:
 
 	template<class UniformsInit>
-	Shader(ShaderLocations&& sl, UniformsInit f)
+	Shader(ShaderLocations&& sl, UniformsInit&& f)
 		: BasicShader(std::forward<ShaderLocations>(sl))
 		, uniform_variables(f(program))
 	{
@@ -94,9 +94,9 @@ public:
 	~Shader() {};
 
 	template <class ...Vs>
-	void render_object(const GLuint& vecLoc, const GLuint& colorLoc, const int draw_style, const size_t& object_size, Vs&&... values) const {
+	void render_object(const GLuint& vecLoc, const GLuint& colorLoc, const int draw_style, const size_t& object_size, Vs&&... uniform_values) const {
 		activate_shader(vecLoc, colorLoc);
-		Uniform::set_values(uniform_variables, std::make_tuple(std::forward<Vs>(values)...));
+		Uniform::set_values(uniform_variables, std::make_tuple(std::forward<Vs>(uniform_values)...));
 		draw_object(draw_style, object_size);
 	};
 };
