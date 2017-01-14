@@ -16,7 +16,6 @@
 struct Camera
 {
 	glm::vec3 position;
-
 	glm::vec3 focus;
 	glm::vec3 up_direction;
 

@@ -85,3 +85,18 @@ struct UniformMat4 : public Uniform {
 		glUniformMatrix4fv(location, 1, false, &value[0][0]);
 	}
 };
+
+// Manages setting the value of a 4x4 Matrix
+struct UniformSampler2D : public Uniform {
+	UniformSampler2D(GLuint program, char* name)
+		: Uniform(program, name)
+	{
+	};
+	void operator() (const std::tuple<GLint, GLuint>& value) const {
+		glUniform1i(location, std::get<0>(value));
+		switch (std::get<0>(value)) {
+		case 0: glActiveTexture(GL_TEXTURE0);
+		}
+		glBindTexture(GL_TEXTURE_2D, std::get<1>(value));
+	}
+};

@@ -36,3 +36,10 @@ struct VertexData2D
 	~VertexData2D();
 };
 
+struct TexturedVertexData2D
+{
+	Coord2D text_coord;
+	Coord2D vert_coord;
+	TexturedVertexData2D(Coord2D t, Coord2D v);
+	~TexturedVertexData2D();
+};

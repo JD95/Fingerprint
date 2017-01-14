@@ -17,13 +17,14 @@ struct ShaderLocations {
 	char *geo;
 };
 
+constexpr void* buffer_offset(int offset) {
+	return (void *)(offset);
+}
+
 // A simple shader that uses no uniform variables
 class BasicShader
 {
 protected:
-	static constexpr void* buffer_offset(int offset) {
-		return (void *)(offset);
-	}
 
 	GLuint program;
 	ShaderInfo info;

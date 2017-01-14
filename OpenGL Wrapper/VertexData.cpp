@@ -26,3 +26,12 @@ Coord2D::Coord2D(GLfloat x, GLfloat y)
 Coord2D::~Coord2D()
 {
 }
+
+TexturedVertexData2D::TexturedVertexData2D(Coord2D t, Coord2D v)
+	: text_coord(t), vert_coord(v)
+{
+}
+
+TexturedVertexData2D::~TexturedVertexData2D()
+{
+}

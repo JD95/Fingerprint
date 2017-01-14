@@ -149,13 +149,13 @@ void Window::RunGame()
 {
 	bool loop = true;
 
-	Polygon shape({
-		{{ 0, 255, 0, 255 },{ -0.90f, 0.90f }},
-		{{ 0, 255, 0, 255 },{  0.90f, -0.90f }},
-		{{ 0, 255, 0, 255 },{ -0.90f, -0.90f }},
-		{{ 0, 0, 255, 255 },{ -0.90f, 0.90f }},
-		{{ 0, 0, 255, 255 },{ 0.90f, -0.90f }},
-		{{ 0, 0, 255, 255 },{ 0.90f, 0.90f }},
+	Polygon shape("logo.png", {
+		{{ 0, 1, 0, 255 },{ -0.90f, 0.90f }},
+		{{ 1, 0, 0, 255 },{  0.90f, -0.90f }},
+		{{ 0, 0, 0, 255 },{ -0.90f, -0.90f }},
+		{{ 0, 1, 255, 255 },{ -0.90f, 0.90f }},
+		{{ 1, 0, 255, 255 },{ 0.90f, -0.90f }},
+		{{ 1, 1, 255, 255 },{ 0.90f, 0.90f }},
 	});
 
 	Transform t;
@@ -163,7 +163,7 @@ void Window::RunGame()
 	t.position = glm::vec3(0, 0.0f, 0);
 	t.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-	Camera c( glm::vec3(0, 0.0f, 1.0f)		// Position
+	Camera c( glm::vec3(0, 0.0f, 2.0f)		// Position
 			, glm::vec3(0.0, 0.5f, -10.0f)	// Focus
 			, glm::vec3(0, 1.0f, 0)			// Up
 			);
@@ -173,22 +173,11 @@ void Window::RunGame()
 		// Draw triangles
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//auto delta = (float)glm::sin(i) * 0.005f;
-		//t.position[0] += delta;
-		//t.scale += delta;
-		//t.rotation = glm::rotate(t.rotation, 0.01f, glm::vec3(0.0f, 0.0f, 1.0f));
-		//c.position[0] += 0.01f;
-		//c.center[0] += 0.01f;
-		
-		//const auto p = glm::frustum( -window_width / 2.0f, window_width / 2.0f		// View width
-		//						   , -window_height / 2.0f, window_height / 2.0f	// View height
-		//						   , 0.1f											// View near
-		//						   , 10.0f);										// View far
-		//const auto p = glm::infinitePerspective(to_radians(45), 5.0f, 0.05f);
-		//const auto p = glm::perspective(to_radians(45), 1.0f, 0.05f, 10.0f);
-		//const auto p = glm::ortho(-10.0f,10.0f,-10.0f,10.0f);
+		auto mvp = c.perspective_projection(45.0f, 1.0f, 0.5f) 
+				 * c.view_matrix() 
+				 * t.model_matrix();
 
-		shape.render(c.perspective_projection(45.0f,1.0f,0.5f) * c.view_matrix() * t.model_matrix());
+		shape.render(mvp);
 		glFlush();
 
 		// Handle SDL events
