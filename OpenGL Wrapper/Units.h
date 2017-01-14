@@ -69,3 +69,7 @@ template <class UnitType> struct Distance
 };
 
 struct Meters {};
+
+constexpr float to_radians(float degrees) { return (180.0f * degrees) / 3.14159265f; }
+
+constexpr float to_degrees(float radians) { return (3.14159265f * radians) / 180.0f; }

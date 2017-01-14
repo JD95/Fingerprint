@@ -7,7 +7,8 @@
 #include "Uniform.h"
 #include "VertexArrayObject.h"
 #include "VertexBufferObject.h"
-#include "Transform.h"
+
+
 
 class Polygon
 {
@@ -31,9 +32,9 @@ public:
 	~Polygon();
 
 	// TODO: Pass in the MVP matrix
-	void render(Transform t) {
+	void render(const glm::mat4& mvp) {
 		model.bind();
-		shader.render_object(0, 1, GL_TRIANGLES, vertices.size(), t.model_matrix());
+		shader.render_object(0, 1, GL_TRIANGLES, vertices.size(), mvp);
 	}
 };
 

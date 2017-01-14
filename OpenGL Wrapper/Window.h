@@ -19,6 +19,9 @@
 using std::vector;
 using std::array;
 
+const int window_width = 512;
+const int window_height = 512;
+
 class Window {
 
 	std::string programName = "Fingerprint Engine - Super Alpha";
@@ -42,6 +45,7 @@ class Window {
 	void PrintSDL_GL_Attributes();
 
 	void RunGame();
+
 
 public:
 	Window();
