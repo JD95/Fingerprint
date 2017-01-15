@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Checks.h" />
+    <ClInclude Include="function_view.h" />
     <ClInclude Include="Position2D.h" />
     <ClInclude Include="LoadShader.h" />
     <ClInclude Include="PhysicsBody.h" />

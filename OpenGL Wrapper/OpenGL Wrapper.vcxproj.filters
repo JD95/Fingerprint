@@ -28,6 +28,9 @@
     <Filter Include="Header Files\Transform">
       <UniqueIdentifier>{6a3f36c1-8108-4ff0-92e7-989f73d0d835}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Texture">
+      <UniqueIdentifier>{34e4b4c2-a06d-486b-9bf3-4b244d68998d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -111,7 +114,10 @@
       <Filter>Header Files\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="function_view.h">
+      <Filter>Header Files\CompileTime_Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
