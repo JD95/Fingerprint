@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
+#include <tuple>
+
 #include <GL\glew.h>
 
-#include "VertexArrayObject.h"
-#include "LoadShader.h"
-#include "Uniform.h"
-#include "VertexData.h"
-#include <tuple>
+#include "../opengl/VertexArrayObject.h"
+#include "../shader/LoadShader.h"
+#include "../shader/Uniform.h"
+#include "../opengl/VertexData.h"
 
 
 struct ShaderLocations {

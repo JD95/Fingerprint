@@ -1,9 +1,11 @@
 #include "Window.h"
-#include "Polygon.h"
-#include "Transform.h"
-#include "Camera.h"
-#include "Units.h"
+
 #include <ctime>
+
+#include "../primitve_shapes/Polygon.h"
+#include "../gameobject/Transform.h"
+#include "../scene/Camera.h"
+#include "../utilities/Units.h"
 
 Window::Window()
 {

@@ -1,10 +1,12 @@
 #pragma once
 
-#include <GL\glew.h>
 #include <tuple>
-#include "Type_Utitilies.h"
-#include "Checks.h"
+
+#include <GL\glew.h>
 #include "glm\mat4x4.hpp"
+
+//#include "Fingerprint/utilities/Type_Utitilies.h"
+//#include "Fingerprint/utilities/Checks.h"
 
 /*
 	The classes defined here are helpers for managing variables which

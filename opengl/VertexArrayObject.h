@@ -1,7 +1,7 @@
 #pragma once
 
 #include <GL\glew.h>
-#include "Checks.h"
+#include "../utilities/Checks.h"
 
 /*
 	Manages the lifetime of a Vertex Array Object.

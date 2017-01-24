@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Transform.h"
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtc\quaternion.hpp"
+
+//#include "Fingerprint/gameobject/Transform.h"
 
 /*
 	A camera is responsible for generating a projection matrix.

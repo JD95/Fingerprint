@@ -5,9 +5,9 @@
 #include <array>
 #include <GL/glew.h>
 
-#include "Checks.h"
-#include "Type_Utitilies.h"
-#include "VertexData.h"
+#include "../Utilities/Checks.h"
+#include "../Utilities/Type_Utitilies.h"
+#include "../opengl/VertexData.h"
 
 using std::vector;
 using std::array;

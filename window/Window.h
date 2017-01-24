@@ -3,18 +3,16 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <fstream>
 
 #include <GL/glew.h>
 #include <SDL.h>
 
-#include "VertexArrayObject.h"
-#include "VertexBufferObject.h"
-#include "Shader.h"
+#include "../opengl/VertexArrayObject.h"
+#include "../opengl/VertexBufferObject.h"
+#include "../shader/Shader.h"
+#include "../shader/LoadShader.h"
 
-#include "LoadShader.h"
-
-#include "PhysicsTesting.h"
-#include <fstream>
 
 using std::vector;
 using std::array;
