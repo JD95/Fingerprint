@@ -17,12 +17,14 @@
 using std::vector;
 using std::array;
 
-const int window_width = 512;
-const int window_height = 512;
+
 
 class Window {
 
-	std::string programName = "Fingerprint Engine - Super Alpha";
+	std::string programName;
+
+	int window_width;
+	int window_height;
 
 	// Our SDL_Window ( just like with SDL2 wihout OpenGL)
 	SDL_Window *mainWindow;
@@ -46,7 +48,7 @@ class Window {
 
 
 public:
-	Window();
+	Window(std::string name, int width, int height);
 
 	~Window();
 

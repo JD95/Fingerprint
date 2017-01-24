@@ -7,7 +7,8 @@
 #include "../scene/Camera.h"
 #include "../utilities/Units.h"
 
-Window::Window()
+Window::Window(std::string name, int width, int height)
+	: window_width(width), window_height(height), programName(name)
 {
 	init = false;
 
