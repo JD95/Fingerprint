@@ -1,4 +1,4 @@
-#include "VertexData.h"
+#include "vertexdata.h"
 
 VertexData2D::VertexData2D(RGBA cs, Coord2D vs)
 	: color(cs), coord(vs)

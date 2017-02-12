@@ -1,11 +1,14 @@
-#include "Window.h"
+#include "window.h"
 
 #include <ctime>
 
-#include "../primitve_shapes/Polygon.h"
-#include "../gameobject/Transform.h"
-#include "../scene/Camera.h"
-#include "../utilities/Units.h"
+#include "../primitive_shapes/polygon.h"
+#include "../entity/transform.h"
+#include "../scene/camera.h"
+#include "../utilities/units.h"
+#include "../entity/entity.h"
+#include "../graphics/model.h"
+#include "../opengl/vertexdata.h"
 
 Window::Window(std::string name, int width, int height)
 	: window_width(width), window_height(height), programName(name)
@@ -103,12 +106,6 @@ void Window::PrintSDL_GL_Attributes()
 	std::cout << "SDL_GL_CONTEXT_MINOR_VERSION: " << value << std::endl;
 }
 
-inline void rotate_camera(Camera& c, float x, float y, float z) {
-	auto r = glm::quat(glm::vec3(x, y, z));
-	c.focus = (r * (c.focus - c.position)) + c.position; // calculate rotated point
-	//c.up_direction = r * c.up_direction;
-	//c.rotation = glm::rotate(c.rotation, r.w, glm::axis(r));
-}
 
 void move_camera_bindings(Camera& c, SDL_Event event) {
 
@@ -133,16 +130,16 @@ void move_camera_bindings(Camera& c, SDL_Event event) {
 		c.focus[0] += camera_speed;
 		break;
 	case SDLK_UP:
-		rotate_camera(c,  camera_speed, 0, 0);
+		c.rotate_camera(camera_speed, 0, 0);
 		break;
 	case SDLK_DOWN:
-		rotate_camera(c, -1 * camera_speed, 0, 0);
+		c.rotate_camera(-1 * camera_speed, 0, 0);
 		break;
 	case  SDLK_LEFT:
-		rotate_camera(c, 0, camera_speed, 0);
+		c.rotate_camera(0, camera_speed, 0);
 		break;
 	case SDLK_RIGHT:
-		rotate_camera(c, 0, -1 * camera_speed, 0);
+		c.rotate_camera(0, -1 * camera_speed, 0);
 		break;
 	default: break;
 	}
@@ -152,19 +149,19 @@ void Window::RunGame()
 {
 	bool loop = true;
 
-	Polygon shape("logo.png", {
-		{{ 0, 1, 0, 255 },{ -0.90f, 0.90f }},
-		{{ 1, 0, 0, 255 },{  0.90f, -0.90f }},
-		{{ 0, 0, 0, 255 },{ -0.90f, -0.90f }},
-		{{ 0, 1, 255, 255 },{ -0.90f, 0.90f }},
-		{{ 1, 0, 255, 255 },{ 0.90f, -0.90f }},
-		{{ 1, 1, 255, 255 },{ 0.90f, 0.90f }},
-	});
-
-	Transform t;
-
-	t.position = glm::vec3(0, 0.0f, 0);
-	t.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	Entity picture(
+		Transform(glm::vec3(0, 0.0f, 0),		// Position
+				  glm::vec3(1.0f, 1.0f, 1.0f)), // Scale
+		Model{ std::string("logo.png"),
+			   std::vector<VertexData2D> { 
+				{ { 0, 1, 0, 255 },{ -0.90f, 0.90f }},
+				{ { 1, 0, 0, 255 },{ 0.90f, -0.90f } },
+				{ { 0, 0, 0, 255 },{ -0.90f, -0.90f } },
+				{ { 0, 1, 255, 255 },{ -0.90f, 0.90f } },
+				{ { 1, 0, 255, 255 },{ 0.90f, -0.90f } },
+				{ { 1, 1, 255, 255 },{ 0.90f, 0.90f } },
+			}
+		});
 
 	Camera c( glm::vec3(0, 0.0f, 2.0f)		// Position
 			, glm::vec3(0.0, 0.5f, -10.0f)	// Focus
@@ -178,9 +175,9 @@ void Window::RunGame()
 
 		auto mvp = c.perspective_projection(45.0f, 1.0f, 0.5f) 
 				 * c.view_matrix() 
-				 * t.model_matrix();
+				 * picture.transform->model_matrix();
 
-		shape.render(mvp);
+		picture.model->render(mvp);
 		glFlush();
 
 		// Handle SDL events

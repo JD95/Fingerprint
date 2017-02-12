@@ -4,12 +4,12 @@
 #include <array>
 #include <string>
 
-#include "../shader/Shader.h"
-#include "../shader/Uniform.h"
-#include "../opengl/VertexArrayObject.h"
-#include "../opengl/VertexBufferObject.h"
-#include "../texture/Texture.h"
-#include "../opengl/VertexData.h"
+#include "../shader/shader.h"
+#include "../shader/uniform.h"
+#include "../opengl/vertex_array_object.h"
+#include "../opengl/vertex_buffer_object.h"
+#include "../texture/texture.h"
+#include "../opengl/vertexdata.h"
 
 class Polygon
 {
@@ -23,7 +23,7 @@ public:
 	Polygon(std::string texture_name, std::vector<VertexData2D> vs)
 		: vertices(vs)
 		, texture(texture_name)
-		, shader({ "Fingerprint/shader/programs/basic.vert", "Fingerprint/shader/programs/basic.frag", NULL, NULL }, 
+		, shader({ "labrat/shader/programs/basic.vert", "labrat/shader/programs/basic.frag", NULL, NULL }, 
 			[](GLuint program) { return std::make_tuple(
 				UniformMat4(program, "modelMatrix"),
 				UniformSampler2D(program, "tex")

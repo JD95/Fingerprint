@@ -1,8 +1,8 @@
 #pragma once
 
-#include "glm\glm.hpp"
-#include "glm\gtc\matrix_transform.hpp"
-#include "glm\gtc\quaternion.hpp"
+#include "glm.hpp"
+#include "gtc\matrix_transform.hpp"
+#include "gtc\quaternion.hpp"
 
 //#include "Fingerprint/gameobject/Transform.h"
 
@@ -28,6 +28,6 @@ public:
 	glm::mat4 view_matrix();
 	glm::mat4 ortho_projection(float left, float right, float bottom, float top);
 	glm::mat4 perspective_projection(float radians, float aspect, float near);
-
+	void rotate_camera(float x, float y, float z);
 };
 

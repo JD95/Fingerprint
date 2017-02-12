@@ -6,7 +6,7 @@
 // Author: Qoheleth
 // http://www.opengl.org/discussion_boards/showthread.php/180175-Redbook-8th-sample-code?p=1245842#post1245842
 // ---------------------------------------------------------------------------
-#include "LoadShader.h"
+#include "loadshader.h"
 
 std::vector<std::tuple<const char*, int, const char*>> ShaderInfo::getShaders()
 {

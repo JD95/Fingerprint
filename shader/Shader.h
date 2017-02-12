@@ -5,10 +5,10 @@
 
 #include <GL\glew.h>
 
-#include "../opengl/VertexArrayObject.h"
-#include "../shader/LoadShader.h"
-#include "../shader/Uniform.h"
-#include "../opengl/VertexData.h"
+#include "../opengl/vertex_array_object.h"
+#include "../shader/loadshader.h"
+#include "../shader/uniform.h"
+#include "../opengl/vertexdata.h"
 
 
 struct ShaderLocations {
@@ -67,14 +67,14 @@ public:
 		: info(sl.vert, sl.frag, sl.tess, sl.geo)
 	{
 		program = LoadShaders(info);
-	};
+	}
 
 	~BasicShader() {};
 
 	void render_object(const GLuint vecLoc, const GLuint colorLoc, const int draw_style, const size_t& object_size) const {
 		activate_shader(vecLoc, colorLoc);
 		draw_object(draw_style, object_size);
-	};
+	}
 };
 
 

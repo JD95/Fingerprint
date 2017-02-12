@@ -60,3 +60,11 @@ public:
 		return _erased_fn(_ptr, std::forward<TArgs>(xs)...);
 	}
 };
+
+// Composes two functions
+template <class F, class G>
+auto pipe(F&& f, G&& g) {
+	return [=](auto x) {
+		return g(f(x));
+	};
+}

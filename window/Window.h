@@ -8,10 +8,10 @@
 #include <GL/glew.h>
 #include <SDL.h>
 
-#include "../opengl/VertexArrayObject.h"
-#include "../opengl/VertexBufferObject.h"
-#include "../shader/Shader.h"
-#include "../shader/LoadShader.h"
+#include "../opengl/vertex_array_object.h"
+#include "../opengl/vertex_buffer_object.h"
+#include "../shader/shader.h"
+#include "../shader/loadshader.h"
 
 
 using std::vector;

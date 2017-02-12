@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "camera.h"
 
 
 
@@ -32,3 +32,7 @@ glm::mat4 Camera::perspective_projection(float radians, float aspect, float near
 }
 
 
+void Camera::rotate_camera(float x, float y, float z) {
+	auto r = glm::quat(glm::vec3(x, y, z));
+	focus = (r * (focus - position)) + position; // calculate rotated point
+}

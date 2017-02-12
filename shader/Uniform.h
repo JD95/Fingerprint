@@ -3,7 +3,7 @@
 #include <tuple>
 
 #include <GL\glew.h>
-#include "glm\mat4x4.hpp"
+#include "mat4x4.hpp"
 
 //#include "Fingerprint/utilities/Type_Utitilies.h"
 //#include "Fingerprint/utilities/Checks.h"
