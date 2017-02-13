@@ -5,15 +5,16 @@
 #include "transform.h"
 #include "../primitive_shapes/polygon.h"
 #include "../graphics/model.h"
+#include "../utilities/slotmap.h"
 
 struct Entity
 {
-	std::unique_ptr<Transform> transform;
-	std::unique_ptr<Polygon> model;
-	//std::unique_ptr<PhysObj> physics;
-public:
+	object_id id;
+	Transform transform;
+	Polygon* model;
+	//PhysObj* physics;
+
 	Entity();
-	Entity(Transform t, Model m);
 	~Entity();
 };
 

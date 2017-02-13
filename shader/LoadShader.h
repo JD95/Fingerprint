@@ -34,6 +34,8 @@ struct ShaderInfo {
 		gShaderFile = g;
 	}
 
+	ShaderInfo() {}
+
 	std::vector<std::tuple<const char*, int, const char*>> getShaders();
 };
 

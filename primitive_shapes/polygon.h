@@ -11,6 +11,10 @@
 #include "../texture/texture.h"
 #include "../opengl/vertexdata.h"
 
+/*!
+	Generates a polygon based on the given verties.
+	Comes with a shader supporting a texture.
+*/
 class Polygon
 {
 	VertexArrayObject<Basic2dCoords> model;
@@ -20,6 +24,7 @@ class Polygon
 	Texture texture;
 
 public:
+
 	Polygon(std::string texture_name, std::vector<VertexData2D> vs)
 		: vertices(vs)
 		, texture(texture_name)
@@ -33,9 +38,13 @@ public:
 		model.use_vbo<0>().setBufferData(vertices);
 	}
 
+	Polygon(const Polygon& other) 
+		: shader(other.shader)
+	{
+	}
+
 	~Polygon() {};
 
-	// TODO: Pass in the MVP matrix
 	void render(const glm::mat4& mvp) {
 		model.bind();
 		shader.render_object(0, 1, GL_TRIANGLES, vertices.size(), mvp, std::make_tuple(0, texture.id()));

@@ -2,6 +2,10 @@
 #include "SOIL.h"
 
 
+Texture::Texture()
+{
+}
+
 Texture::Texture(std::string texture_name)
 {
 	texture_id = SOIL_load_OGL_texture(

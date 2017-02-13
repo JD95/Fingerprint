@@ -22,6 +22,11 @@ public:
 		glGenBuffers(num_vbos, vbo_ids);
 	}
 
+	VertexArrayObject(const VertexArrayObject& other) {
+		this->vao_id = other.vao_id;
+		this->vbo_ids = other.vbo_ids;
+	}
+
 	~VertexArrayObject()
 	{
 		glDeleteVertexArrays(1, &vao_id);
