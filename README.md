@@ -12,6 +12,6 @@ Project Dependencies:
 1. Download the above libraries
 2. Add glm folder to VC++ directories
 3. Add include folders of GLEW and SDL2 to VC++ additional include folders
-4. Add lib/Release/x86/, lib/x86/, and lib/x86/ from GLEW, SDL2, and SOIL respectively.
+4. Add lib/Release/x86/, lib/x86/, and lib/x86/ to linker additional libraries from GLEW, SDL2, and SOIL respectively.
 
 
