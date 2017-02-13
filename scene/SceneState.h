@@ -22,6 +22,6 @@ public:
 	SceneState();
 	~SceneState();
 
-	Entity* instantiate(Model model, Transform transform);
+	Entity* spawn(Model model, Transform transform);
 	void render_scene(Camera camera);
 };

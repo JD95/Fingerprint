@@ -25,7 +25,7 @@ using std::array;
 void move_camera_bindings(Camera& c, SDL_Event event);
 
 template<class T>
-class Window {
+class Game {
 
 	std::string programName;
 
@@ -42,7 +42,7 @@ class Window {
 
 	bool init;
 
-	bool Window::SetOpenGLAttributes()
+	bool Game::SetOpenGLAttributes()
 	{
 		// Set our OpenGL version.
 		// SDL_GL_CONTEXT_CORE gives us only the newer version, deprecated functions are disabled
@@ -59,7 +59,7 @@ class Window {
 		return true;
 	}
 
-	void Window::CheckSDLError(int line = -1)
+	void Game::CheckSDLError(int line = -1)
 	{
 		std::string error = SDL_GetError();
 
@@ -74,7 +74,7 @@ class Window {
 		}
 	}
 
-	void Window::PrintSDL_GL_Attributes()
+	void Game::PrintSDL_GL_Attributes()
 	{
 		int value = 0;
 		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &value);
@@ -84,75 +84,11 @@ class Window {
 		std::cout << "SDL_GL_CONTEXT_MINOR_VERSION: " << value << std::endl;
 	}
 
-	template <class F>
-	void RunGame(F f)
-	{
-		bool loop = true;
-
-		Scene<T> scene(f);
-		//Polygon logo(
-		//	std::string("logo.png"),
-		//	std::vector<VertexData2D> {
-		//		{ { 0, 1, 0, 255 },{ -0.90f, 0.90f }},
-		//		{ { 1, 0, 0, 255 },{ 0.90f, -0.90f } },
-		//		{ { 0, 0, 0, 255 },{ -0.90f, -0.90f } },
-		//		{ { 0, 1, 255, 255 },{ -0.90f, 0.90f } },
-		//		{ { 1, 0, 255, 255 },{ 0.90f, -0.90f } },
-		//		{ { 1, 1, 255, 255 },{ 0.90f, 0.90f } },
-		//});
-
-		//Transform t(glm::vec3(0, 0.0f, 0), glm::vec3(1.0f, 1.0f, 1.0f));
-
-		//Camera camera(glm::vec3(0, 0.0f, 2.0f)		// Position
-		//	, glm::vec3(0.0, 0.5f, -10.0f)	// Focus
-		//	, glm::vec3(0, 1.0f, 0)			// Up
-		//);
-
-		while (loop) {
-
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			//scene.st.render_scene(scene.st.main_camera);
-			/*auto mvp = camera.perspective_projection(45.0f, 1.0f, 0.5f)
-				* camera.view_matrix()
-				* t.model_matrix();*/
-
-			//logo.render(mvp);
-
-			auto mvp = scene.st.main_camera.perspective_projection(45.0f, 1.0f, 0.5f)
-					 * scene.st.main_camera.view_matrix()
-					 * scene.st.picture->transform.model_matrix();
-
-			scene.st.picture->model->render(mvp);
-
-			glFlush();
-
-			// Handle SDL events
-			SDL_Event event;
-			while (SDL_PollEvent(&event))
-			{
-				if (event.type == SDL_QUIT)
-					loop = false;
-
-				if (event.type == SDL_KEYDOWN)
-				{
-					move_camera_bindings(scene.st.main_camera, event);
-				}
-			}
-
-			SDL_GL_SwapWindow(mainWindow);
-		}
-
-	}
-
-
-
 public:
 
 
 
-	Window::Window(std::string name, int width, int height)
-					
+	Game::Game(std::string name, int width, int height)	
 		: window_width(width), window_height(height), programName(name)
 	{
 		init = false;
@@ -194,7 +130,7 @@ public:
 		init = true;
 	}
 
-	Window::~Window()
+	Game::~Game()
 	{
 		// Delete our OpengL context
 		SDL_GL_DeleteContext(mainContext);
@@ -215,7 +151,33 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT);
 		SDL_GL_SwapWindow(mainWindow);
 		
-		RunGame(f);
+		bool loop = true;
+
+		Scene<T> scene(f);
+
+		while (loop) {
+
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			scene.st.render_scene(scene.st.main_camera);
+
+			glFlush();
+
+			// Handle SDL events
+			SDL_Event event;
+			while (SDL_PollEvent(&event))
+			{
+				if (event.type == SDL_QUIT)
+					loop = false;
+
+				if (event.type == SDL_KEYDOWN)
+				{
+					move_camera_bindings(scene.st.main_camera, event);
+				}
+			}
+
+			SDL_GL_SwapWindow(mainWindow);
+		}
 
 		return 0;
 	}

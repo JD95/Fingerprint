@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <iostream>
 
 #include "../shader/shader.h"
 #include "../shader/uniform.h"
@@ -41,6 +42,7 @@ public:
 	Polygon(const Polygon& other) 
 		: shader(other.shader)
 	{
+		std::cout << "COPY CONSTRUCTOR CALLED!!!!" << std::endl;
 	}
 
 	~Polygon() {};

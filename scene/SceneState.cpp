@@ -16,7 +16,7 @@ SceneState::~SceneState()
 	}
 }
 
-Entity * SceneState::instantiate(Model model, Transform transform)
+Entity * SceneState::spawn(Model model, Transform transform)
 {
 	auto new_entity_id = entities.create_object();
 	auto new_entity = entities.get_object(new_entity_id);
