@@ -16,33 +16,47 @@ template <class T>
 struct SlotMap
 {
 	static constexpr size_t chunk_size = 256;
+
+	/*!
+		A vector which points to array chunks of entities.
+	*/
 	std::vector<T*> object_table;
 
 	/*!
 		A list of ids which contains two halves: in use and free ids.
 
-		| In Use		| Free
-		|0,1,2,3,4,5,6,7|8,9,10,11,12,13,14
+		| In Use		| Free			   |
+		| ------------: | ---------------: |
+		|0,1,2,3,4,5,6,7|8,9,10,11,12,13,14|
 
 		When an object is created, first_free_index is incremented.
 
-		| In Use		  | Free
-		|0,1,2,3,4,5,6,7,8|9,10,11,12,13,14
+		| In Use		  | Free		   |
+		| --------------: | -------------: |
+		|0,1,2,3,4,5,6,7,8|9,10,11,12,13,14|
 
 		When an object is destroyed it's id is then swapped with the largest
 		in use id and first_free_index is decremented.
 
-		Eg. destroy_object(5)
+		Eg. `destroy_object(5)`
 
-		| In Use		  | Free
-		|0,1,2,3,4,8,6,7,5|9,10,11,12,13,14		// The active id is moved to the end
+		The active id is moved to the end
 
-		| In Use		| Free
-		|0,1,2,3,4,8,6,7|5,9,10,11,12,13,14		// first_free_index is decremented
+		| In Use		  | Free		   |
+		| --------------: | -------------: |
+		|0,1,2,3,4,8,6,7,5|9,10,11,12,13,14|
+		
+		first_free_index is decremented
 
+		| In Use		| Free			   |
+		| ------------: | ---------------: |
+		|0,1,2,3,4,8,6,7|5,9,10,11,12,13,14|
 
-		| In Use		| Free
-		|0,1,2,3,4,6,7,8|5,9,10,11,12,13,14		// The in-use portion is sorted to allow for binary searches
+		The in-use portion is sorted to allow for binary searches
+
+		| In Use		| Free			   |
+		| ------------: | ---------------: |
+		|0,1,2,3,4,6,7,8|5,9,10,11,12,13,14|
 
 	*/
 	std::vector<int> id_list;
