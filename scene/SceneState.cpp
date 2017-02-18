@@ -35,19 +35,16 @@ Entity * SceneState::spawn(Model model, Transform transform)
 void SceneState::render_scene(Camera camera)
 {
 	auto chunks = entities.object_table.size();
-	for (size_t i = 0; i < chunks; i++)
-	{
-		for (int j = 0; j < entities.chunk_size; j++)
-		{
-			if (entities.is_free_id(entities.chunk_size*i + j))
-				continue;
 
-			auto entity = entities.object_table[i][j];
+	// Renders all entities which have in-use ids
+	for (int i = entities.id_list[0]; i < entities.first_free_index; i++){
+
+			auto entity = entities.object_table[i / entities.chunk_size][i % entities.chunk_size];
+
 			auto mvp = camera.perspective_projection(45.0f, 1.0f, 0.5f)
 					 * camera.view_matrix()
 					 * entity.transform.model_matrix();
 
 			entity.model->render(mvp);
-		}
 	}
 }
