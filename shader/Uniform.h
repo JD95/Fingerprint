@@ -86,6 +86,15 @@ struct UniformDouble : public Uniform {
 };
 
 // Manages setting the value of a 4x4 Matrix
+struct UniformVec2 : public Uniform {
+	UniformVec2() {};
+	UniformVec2(GLuint program, char* name) : Uniform(program, name) {};
+	void operator() (const glm::vec2& value) const {
+		glUniform2fv(location, 1, &value[0]);
+	}
+};
+
+// Manages setting the value of a 4x4 Matrix
 struct UniformMat4 : public Uniform {
 	UniformMat4() {};
 	UniformMat4(GLuint program, char* name) : Uniform(program, name) {};

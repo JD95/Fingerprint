@@ -2,6 +2,8 @@
 #include <functional>
 #include <vector>
 
+#include <SDL.h>
+
 using std::vector;
 using std::function;
 
@@ -13,24 +15,27 @@ using update = function<void()>;
 template <class State>
 class Scene
 {
-	function<void(vector<update_t<State&>>&, const State&)> construct_updates;
+	function<void(
+		vector<update_t<State&>>&,		// Updates to run
+		const vector<SDL_Event>&,		// Keyboard Events
+		const State&					// The previous frame's state
+		)> construct_updates;
+
 	vector<update_t<State&>> updates;
 
 public:
 
 	State st;
 	
-	Scene(function<void(vector<update_t<State&>>&, const State&)> c_u)
-		: construct_updates(c_u) 
-	{ 
-		int x = 5;
-	}
+	Scene() {}
 
 	~Scene() {}
 
-	void update() {
-		construct_updates(vector<update_t<State&>>& updates);
+	void update(const vector<SDL_Event>& keyboard_events) {
+		st.construct_updates(updates, keyboard_events, st);
 		for (auto update : updates) update(st);
+		st.render_scene(st.main_camera);
+		updates.clear();
 	}
 };
 

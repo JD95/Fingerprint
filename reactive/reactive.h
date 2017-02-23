@@ -33,8 +33,17 @@ struct Reactive
 {
 	T value; /**< The reactive value.*/
 
-	Reactive();
-	~Reactive();
+	Reactive()
+	{
+	}
+
+	Reactive(const T& v) {
+		value = v;
+	}
+
+	~Reactive()
+	{
+	}
 
 	/*!
 		Generates a callback to update value using the function f.

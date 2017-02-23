@@ -15,7 +15,7 @@
 #include "../shader/loadshader.h"
 #include "../scene/scene.h"
 #include "../scene/camera.h"
-
+#include "../primitive_shapes/full_screen.h"
 
 using std::vector;
 using std::array;
@@ -141,8 +141,7 @@ public:
 		SDL_Quit();
 	}
 
-	template <class F>
-	int game(F f)
+	int game()
 	{
 		if (!init) return -1;
 
@@ -152,15 +151,11 @@ public:
 		
 		bool loop = true;
 
-		Scene<T> scene(f);
+		Scene<T> scene;
+
 
 		while (loop) {
-
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			scene.st.render_scene(scene.st.main_camera);
-
-			glFlush();
+			std::vector<SDL_Event> events;
 
 			// Handle SDL events
 			SDL_Event event;
@@ -171,9 +166,15 @@ public:
 
 				if (event.type == SDL_KEYDOWN)
 				{
-					move_camera_bindings(scene.st.main_camera, event);
+					events.push_back(event);
 				}
 			}
+
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			scene.update(events);
+
+			glFlush();
 
 			SDL_GL_SwapWindow(mainWindow);
 		}
