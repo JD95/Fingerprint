@@ -21,7 +21,7 @@ using std::vector;
 using std::array;
 
 
-void move_camera_bindings(Camera& c, SDL_Event event);
+void move_character(Camera& c, SDL_Event event);
 
 template<class T>
 class Game {
@@ -164,7 +164,7 @@ public:
 				if (event.type == SDL_QUIT)
 					loop = false;
 
-				if (event.type == SDL_KEYDOWN)
+				if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 				{
 					events.push_back(event);
 				}

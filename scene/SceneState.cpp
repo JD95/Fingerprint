@@ -4,6 +4,7 @@
 
 
 SceneState::SceneState()
+	: physics(20, 20, 0.0f, -9.81f)
 {
 	int x = 0;
 }
@@ -16,7 +17,7 @@ SceneState::~SceneState()
 	}
 }
 
-Entity * SceneState::spawn(Model model, Transform transform)
+Entity * SceneState::spawn(Model model, Transform transform, PhysObj body)
 {
 	auto new_entity_id = entities.create_object();
 	auto new_entity = entities.get_object(new_entity_id);
@@ -29,11 +30,14 @@ Entity * SceneState::spawn(Model model, Transform transform)
 
 	new_entity->model = models[model.model_name];
 
+	new_entity->body = physics.add_object(body);
+
 	return new_entity;
 }
 
 void SceneState::render_scene(Camera camera)
 {
+	physics.step();
 	auto chunks = entities.object_table.size();
 
 	// Renders all entities which have in-use ids
@@ -41,7 +45,7 @@ void SceneState::render_scene(Camera camera)
 
 			auto entity = entities.object_table[i / entities.chunk_size][i % entities.chunk_size];
 
-			auto mvp = camera.perspective_projection(45.0f, 1.0f, 0.5f)
+			auto mvp = camera.perspective_projection(45.0f, 1080.0f/720.0f, 0.10f)
 					 * camera.view_matrix()
 					 * entity.transform.model_matrix();
 
