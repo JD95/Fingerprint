@@ -26,35 +26,36 @@ void World::step()
 	Manifold m;
 
 	std::vector<PhysObj> check_objects;
-	int concern = 0;
-		
-	//clear the check objects list
-	check_objects.clear();
-	//with regards to object of concern, check which quadtree division hosts it
-	check_objects = quad.retrieve(objects[concern]);
-		
-	//begin verlet integrations, most likely will be a for loop for all objects
-	for(auto& object : objects)
-		object.add_gravity(gravity_acc);
+	for (size_t concern = 0; concern < objects.size(); concern++) {
 
-	//check collisions of all objects that are proximate to the target object
-	for (size_t i = 0; i < check_objects.size(); i++)
-	{
-		if (i == concern)
-			continue;
-		else
+		//clear the check objects list
+		check_objects.clear();
+		//with regards to object of concern, check which quadtree division hosts it
+		check_objects = quad.retrieve(objects[concern]);
+
+		//begin verlet integrations, most likely will be a for loop for all objects
+		for (auto& object : objects)
+			object.add_gravity(gravity_acc);
+
+		//check collisions of all objects that are proximate to the target object
+		for (size_t i = 0; i < check_objects.size(); i++)
 		{
-			m.A = &objects[i];
-			m.B = &objects[concern];
-
-			//Check actual colliosns
-			//TODO: 
-			//	make it so that there is an initial simple check then a more in depth check
-			if (Collide(m))
+			if (i == concern)
+				continue;
+			else
 			{
+				m.A = &objects[i];
+				m.B = &objects[concern];
 
-				calculate_resolution(m);
-				sink_correction(m);
+				//Check actual colliosns
+				//TODO: 
+				//	make it so that there is an initial simple check then a more in depth check
+				if (Collide(m))
+				{
+
+					calculate_resolution(m);
+					sink_correction(m);
+				}
 			}
 		}
 	}
