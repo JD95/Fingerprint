@@ -28,7 +28,10 @@ glm::mat4 Camera::ortho_projection(float left, float right, float bottom, float 
 }
 
 glm::mat4 Camera::perspective_projection(float radians, float aspect, float near) {
-	return glm::perspective(radians, 1.0f, 0.05f, glm::distance(position, focus));
+	return glm::perspective(radians, aspect, near, 10.0f);// glm::distance(position, focus));
+	/*auto x = position[0];
+	auto y = position[1];
+	return glm::frustum(x - 1, x + 1, y - 1, y + 1, 0.5f, 5.f);*/
 }
 
 

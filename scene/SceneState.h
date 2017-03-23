@@ -13,6 +13,14 @@
 #include "../scene/camera.h"
 #include "../physics/World.h"
 
+const float world_step = 0.0167f;
+
+constexpr float model_body_ratio = 1.23f;
+
+constexpr glm::vec3 physics_ratio_scaling(float x, float y) {
+	return glm::vec3(model_body_ratio * x, model_body_ratio * y, 1.0f);
+}
+
 class SceneState
 {
 	SlotMap<Entity> entities;
@@ -24,6 +32,9 @@ public:
 	SceneState();
 	~SceneState();
 
+	Entity* spawn(Model model, Transform transform);
 	Entity* spawn(Model model, Transform transform, PhysObj body);
+	Entity* spawn_body(Model model, float layer, float x, float y, float width, float height, float mass);
+	Entity* spawn_massless(Model model, float layer, float x, float y, float width, float height);
 	void render_scene(Camera camera);
 };

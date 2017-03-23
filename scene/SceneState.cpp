@@ -17,7 +17,7 @@ SceneState::~SceneState()
 	}
 }
 
-Entity * SceneState::spawn(Model model, Transform transform, PhysObj body)
+Entity * SceneState::spawn(Model model, Transform transform)
 {
 	auto new_entity_id = entities.create_object();
 	auto new_entity = entities.get_object(new_entity_id);
@@ -30,9 +30,32 @@ Entity * SceneState::spawn(Model model, Transform transform, PhysObj body)
 
 	new_entity->model = models[model.model_name];
 
+	return new_entity;
+}
+
+Entity * SceneState::spawn(Model model, Transform transform, PhysObj body)
+{
+	auto new_entity = spawn(model, transform);
+
 	new_entity->body = physics.add_object(body);
 
 	return new_entity;
+}
+
+Entity * SceneState::spawn_body(Model model, float layer, float x, float y, float width, float height, float mass)
+{
+	auto model_width = model_body_ratio*(width / 2);
+	auto model_height = model_body_ratio*(height / 2);
+	return spawn(model,
+		Transform(glm::vec3(model_body_ratio*x , model_body_ratio*y, layer), glm::vec3(model_width, model_height, 1.0f)),
+		PhysObj(x, y, mass, height, width, world_step));
+}
+
+Entity * SceneState::spawn_massless(Model model, float layer, float x, float y, float width, float height){
+	auto model_width = model_body_ratio*(width / 2);
+	auto model_height = model_body_ratio*(height / 2);
+	return spawn(model,
+		Transform(glm::vec3(x, y, layer), glm::vec3(model_width, model_height, 1.0f)));
 }
 
 void SceneState::render_scene(Camera camera)

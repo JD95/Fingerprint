@@ -205,7 +205,7 @@ void calculate_resolution(Manifold& m)
 
 	//m.B->velocity = e * ( ((m.B->mass.mass - m.A->mass.mass) / denom)*m.A->velocity + ((2 * m.A->mass.mass) / denom)*m.A->velocity);
 
-	resolve_friction(m, e);
+	//resolve_friction(m, e);
 }
 
 void sink_correction(Manifold & m)
