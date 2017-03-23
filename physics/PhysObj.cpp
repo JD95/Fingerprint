@@ -100,7 +100,18 @@ float pythagorean_solve(float a, float b) {
 */
 inline void resolve_friction(Manifold& m, float e) {
 	
+	// Regular velocity following impulse resolution
+	glm::vec2 rv = m.B->velocity - m.A->velocity;
+	
+	// PythagoreanSolve = A^2 + B^2 = C^2, solving for C given A and B
+	// Use to approximate mu given friction coefficients of each body
+	float mu = pythagorean_solve(m.A->static_friction, m.B->static_friction);
 
+	if (m.A->velocity < 0.001f)
+	{
+
+	}
+	/*
 	// Re-calculate relative velocity after normal impulse
 	// is applied (impulse from first article, this code comes
 	// directly thereafter in the same resolve function)
@@ -110,7 +121,7 @@ inline void resolve_friction(Manifold& m, float e) {
 	auto t_pre = rv - (glm::dot(rv, m.normal) * m.normal);
 	glm::vec2 t = (!t_pre[0] && !t_pre[1]) ? glm::vec2(0.0f,0.0f) : glm::normalize(t_pre);
 
-	float j = -(1 + e) * glm::dot(t, rv);
+	float j = -(1 + e) * glm::dot(rv, t);
 	j /= (m.A->mass.inv_mass + m.B->mass.inv_mass);
 
 
@@ -136,7 +147,7 @@ inline void resolve_friction(Manifold& m, float e) {
 
 	// Apply
 	m.A->velocity -= (m.A->mass.inv_mass) * friction_impulse;
-	m.B->velocity -= (m.B->mass.inv_mass) * friction_impulse;
+	m.B->velocity -= (m.B->mass.inv_mass) * friction_impulse;*/
 };
 
 void calculate_resolution(Manifold& m)
@@ -169,7 +180,10 @@ void calculate_resolution(Manifold& m)
 
 	ratio = m.B->mass.mass / sum_mass;
 	m.B->velocity += ratio * impulse;
+	
+	resolve_friction(m, e);
 
+	// Stop acceleration when come in contact with an object
 	if (m.normal.x == 0) //affecting y direction
 	{
 		float temp = m.A->acceleration.x;
@@ -181,31 +195,7 @@ void calculate_resolution(Manifold& m)
 		m.A->acceleration = glm::vec2(0, temp);
 	}
 
-	//float e = std::min(m.A->material.restitution, m.B->material.restitution);
-
-	//float denom = (m.A->mass.mass + m.B->mass.mass);
-
-	//std::cout << "penetration: " << m.penetration << "\nNormal: " << m.normal.x << " " << m.normal.y << "\n";
-
-	//if (m.normal.x == 0) //affecting y direction
-	//{
-	//	float temp = m.A->acceleration.x;
-	//	m.A->acceleration = glm::vec2(temp, 0);
-	//}
-	//else				//affecting x direction
-	//{
-	//	float temp = m.A->acceleration.y;
-	//	m.A->acceleration = glm::vec2(0, temp);
-	//}
-
-	///*m.A->acceleration = glm::vec2(0, 0);
-	//m.B->acceleration = glm::vec2(0, 0);*/
-
-	//m.A->velocity = e * ( ((m.A->mass.mass - m.B->mass.mass) / denom)*m.A->velocity + ((2 * m.A->mass.mass) / denom)*m.B->velocity); 
-
-	//m.B->velocity = e * ( ((m.B->mass.mass - m.A->mass.mass) / denom)*m.A->velocity + ((2 * m.A->mass.mass) / denom)*m.A->velocity);
-
-	//resolve_friction(m, e);
+	
 }
 
 void sink_correction(Manifold & m)

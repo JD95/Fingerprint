@@ -3,7 +3,7 @@ Project Dependencies:
 
 - [SDL2 for Windowing](https://www.libsdl.org/download-2.0.php)
 
-- [SOIL for Texture Loading](http://www.lonesock.net/soil.html)
+- [SOIL for Texture Loading]( )
 
 - [GLM for Matrix Math](http://glm.g-truc.net/0.9.8/index.html)
 
@@ -32,6 +32,17 @@ Step 3: Edit your project properties (All paths relative to where you put the li
     - SDL2-2.0.4\lib\x86
     - glew-2.0.0-win32\glew-2.0.0\lib\Release\Win32
     - SOIL (wherever you put the SOIL.lib you build in Step 2)
+  - Linker -> Input -> Additional Dependencies
+    - glew32.lib
+    - SDL2.lib
+    - SDL2main.lib
+    - SOIL.lib
+    - opengl32.lib
 
 Step 4:
   - Properties -> Linker -> System -> SubSystem: make sure that it is Console (/SUBSYSTEM:CONSOLE)
+
+Step 5:
+  - Build the project, it will fail but create a Debug folder in the main directory of the project.
+  - From glew-2.0.0\bin\Release\Win32 copy glew32.dll and paste it into the newly created debug folder where the project's .exe has been built
+  - From SDL2-2.0.4\lib\x86 copy SDL2.dll into the same location as glew32.dll

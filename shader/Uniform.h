@@ -90,7 +90,8 @@ struct UniformVec2 : public Uniform {
 	UniformVec2() {};
 	UniformVec2(GLuint program, char* name) : Uniform(program, name) {};
 	void operator() (const glm::vec2& value) const {
-		glUniform2fv(location, 1, &value[0]);
+		auto test = &value[0];
+		glUniform2fv(location, 1, test);
 	}
 };
 

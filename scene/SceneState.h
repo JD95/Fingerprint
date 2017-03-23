@@ -17,10 +17,6 @@ const float world_step = 0.0167f;
 
 constexpr float model_body_ratio = 1.23f;
 
-constexpr glm::vec3 physics_ratio_scaling(float x, float y) {
-	return glm::vec3(model_body_ratio * x, model_body_ratio * y, 1.0f);
-}
-
 class SceneState
 {
 	SlotMap<Entity> entities;

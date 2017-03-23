@@ -44,18 +44,18 @@ Entity * SceneState::spawn(Model model, Transform transform, PhysObj body)
 
 Entity * SceneState::spawn_body(Model model, float layer, float x, float y, float width, float height, float mass)
 {
-	auto model_width = model_body_ratio*(width / 2);
-	auto model_height = model_body_ratio*(height / 2);
+	auto model_width = (width / 2.0f);
+	auto model_height =(height / 2.0f);
 	return spawn(model,
-		Transform(glm::vec3(model_body_ratio*x , model_body_ratio*y, layer), glm::vec3(model_width, model_height, 1.0f)),
+		Transform(glm::vec3(x + model_width , y + model_height, layer), glm::vec3(model_width, model_height, 1.0f)),
 		PhysObj(x, y, mass, height, width, world_step));
 }
 
 Entity * SceneState::spawn_massless(Model model, float layer, float x, float y, float width, float height){
-	auto model_width = model_body_ratio*(width / 2);
-	auto model_height = model_body_ratio*(height / 2);
+	auto model_width = (width / 2.0f);
+	auto model_height = (height / 2.0f);
 	return spawn(model,
-		Transform(glm::vec3(x, y, layer), glm::vec3(model_width, model_height, 1.0f)));
+		Transform(glm::vec3(x + model_width, y + model_height, layer), glm::vec3(model_width, model_height, 1.0f)));
 }
 
 void SceneState::render_scene(Camera camera)
