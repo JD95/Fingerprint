@@ -107,10 +107,10 @@ inline void resolve_friction(Manifold& m, float e) {
 	// Use to approximate mu given friction coefficients of each body
 	float mu = pythagorean_solve(m.A->static_friction, m.B->static_friction);
 
-	if (m.A->velocity < 0.001f)
-	{
+	//if (m.A->velocity < 0.001f)
+	//{
 
-	}
+	//}
 	/*
 	// Re-calculate relative velocity after normal impulse
 	// is applied (impulse from first article, this code comes

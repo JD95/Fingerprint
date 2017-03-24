@@ -17,7 +17,7 @@ struct AABB
 
 	}
 
-	AABB(float minX, float minY, float hei, float wid)
+	AABB(float minX, float minY, float wid, float hei)
 	{
 		min = glm::vec2(minX, minY);
 		height = hei;

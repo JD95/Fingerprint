@@ -5,9 +5,9 @@ Collider::Collider()
 {
 }
 
-Collider::Collider(float x, float y, float height, float width)
+Collider::Collider(float x, float y, float width, float height)
 {
-	shape.Rect = AABB(x, y, height, width);
+	shape.Rect = AABB(x, y, width, height);
 	type = 1;
 }
 

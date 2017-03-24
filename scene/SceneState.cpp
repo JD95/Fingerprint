@@ -48,7 +48,7 @@ Entity * SceneState::spawn_body(Model model, float layer, float x, float y, floa
 	auto model_height =(height / 2.0f);
 	return spawn(model,
 		Transform(glm::vec3(x + model_width , y + model_height, layer), glm::vec3(model_width, model_height, 1.0f)),
-		PhysObj(x, y, mass, height, width, world_step));
+		PhysObj(x, y, mass, width, height, world_step));
 }
 
 Entity * SceneState::spawn_massless(Model model, float layer, float x, float y, float width, float height){
