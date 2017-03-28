@@ -11,7 +11,7 @@
 //	Need these definitions of is_callable until c++17 lands
 //	http://en.cppreference.com/w/cpp/types/is_callable
 // ============================================================================
-template <class T, class R = void, class = void>
+template <class T, class SignatureT = void, class = void>
 struct is_callable : std::false_type
 {};
 
@@ -19,9 +19,9 @@ template <class T>
 struct is_callable<T, void, std::void_t<std::result_of_t<T>>> : std::true_type
 {};
 
-template <class T, class R>
-struct is_callable<T, R, std::void_t<std::result_of_t<T>>>
-	: std::is_convertible<std::result_of_t<T>, R>
+template <class T, class SignatureT>
+struct is_callable<T, SignatureT, std::void_t<std::result_of_t<T>>>
+	: std::is_convertible<std::result_of_t<T>, SignatureT>
 {};
 
 // ============================================================================
