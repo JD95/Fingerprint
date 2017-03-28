@@ -49,7 +49,7 @@ PhysObj::PhysObj(float pos_x, float pos_y, float m, float radius, float step)
 
 void PhysObj::add_force(float fx, float fy)
 {
-	force +=  glm::vec2(fx, fy);
+	force += glm::vec2(fx, fy);
 }
 
 void PhysObj::reset_object()
@@ -94,24 +94,21 @@ float pythagorean_solve(float a, float b) {
 }
 
 /*!
-	Based on tutorial from
-	https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-friction-scene-and-jump-table--gamedev-7756
+Based on tutorial from
+https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-friction-scene-and-jump-table--gamedev-7756
 
 */
 inline void resolve_friction(Manifold& m, float e) {
-	
-	// Regular velocity following impulse resolution
-	glm::vec2 rv = m.B->velocity - m.A->velocity;
-	
-	// PythagoreanSolve = A^2 + B^2 = C^2, solving for C given A and B
-	// Use to approximate mu given friction coefficients of each body
-	float mu = pythagorean_solve(m.A->static_friction, m.B->static_friction);
+	//if (abs(m.A->velocity.x) > .001)
+	{
+		//m.A->velocity.x -= m.A->velocity.x * 0.05f;
+	}
+	//else
+	{
+		//m.A->velocity.x = 0.0f;
+	}
 
-	//if (m.A->velocity < 0.001f)
-	//{
 
-	//}
-	/*
 	// Re-calculate relative velocity after normal impulse
 	// is applied (impulse from first article, this code comes
 	// directly thereafter in the same resolve function)
@@ -119,14 +116,14 @@ inline void resolve_friction(Manifold& m, float e) {
 
 	// Solve for the tangent vector
 	auto t_pre = rv - (glm::dot(rv, m.normal) * m.normal);
-	glm::vec2 t = (!t_pre[0] && !t_pre[1]) ? glm::vec2(0.0f,0.0f) : glm::normalize(t_pre);
+	glm::vec2 t = (!t_pre[0] && !t_pre[1]) ? glm::vec2(0.0f, 0.0f) : glm::normalize(t_pre);
 
-	float j = -(1 + e) * glm::dot(rv, t);
+	float j = -(1 + e) * glm::dot(rv, m.normal);
 	j /= (m.A->mass.inv_mass + m.B->mass.inv_mass);
 
 
-		// Solve for magnitude to apply along the friction vector
-	float jt = -glm::dot(rv, t);
+	// Solve for magnitude to apply along the friction vector
+	float jt = -glm::dot(rv, -t);
 	jt = jt / (m.A->mass.inv_mass + m.B->mass.inv_mass);
 
 	// PythagoreanSolve = A^2 + B^2 = C^2, solving for C given A and B
@@ -147,7 +144,7 @@ inline void resolve_friction(Manifold& m, float e) {
 
 	// Apply
 	m.A->velocity -= (m.A->mass.inv_mass) * friction_impulse;
-	m.B->velocity -= (m.B->mass.inv_mass) * friction_impulse;*/
+	m.B->velocity -= (m.B->mass.inv_mass) * friction_impulse;
 };
 
 void calculate_resolution(Manifold& m)
@@ -180,8 +177,8 @@ void calculate_resolution(Manifold& m)
 
 	ratio = m.B->mass.mass / sum_mass;
 	m.B->velocity += ratio * impulse;
-	
-	resolve_friction(m, e);
+
+
 
 	// Stop acceleration when come in contact with an object
 	if (m.normal.x == 0) //affecting y direction
@@ -195,7 +192,7 @@ void calculate_resolution(Manifold& m)
 		m.A->acceleration = glm::vec2(0, temp);
 	}
 
-	
+	resolve_friction(m, e);
 }
 
 void sink_correction(Manifold & m)

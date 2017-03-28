@@ -31,8 +31,8 @@ public:
 	MassData mass;
 	glm::vec2 acceleration;
 	glm::vec2 velocity;
-	float static_friction;
-	float dynamic_friction;
+	float static_friction = 0.5;
+	float dynamic_friction = 1.0;
 
 	//Used for time controlling elements
 	float original_time;
