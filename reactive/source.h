@@ -43,6 +43,61 @@ struct ReactiveVal {
 	
 };
 
+template <class ...Ts>
+class DependencyList;
+
+
+template <>
+class DependencyList <> {
+public:
+	template <class G>
+	DependencyList<G> insert(G value) {
+		return DependencyList<G>(value);
+	}
+};
+
+template <class T>
+class DependencyList <T> {
+	T dependent;
+
+public:
+
+	DependencyList(T d)
+		: dependent(d) {}
+	void calculate() {
+		dependent.calculate();
+	}
+
+	void update() {
+		dependent.update();
+	}
+};
+
+template <class T, class ...Ts>
+class DependencyList <T,Ts...> {
+	T dependent;
+	DependencyList<Ts...> rest;
+
+public:
+
+	DependencyList(T d, Ts... r)
+		: dependent(d), rest(r) {}
+
+	void calculate() {
+		dependent.calculate();
+		rest.calculate();
+	}
+
+	void update() {
+		dependent.update();
+		rest.update();
+	}
+
+	template <class G>
+	DependencyList<G, T, Ts...> insert(G value) {
+		return DependencyList<G, T, Ts...>(value, *this);
+	}
+};
 
 template <class DependentT, class ...Ts>
 struct Dependency {
@@ -52,6 +107,7 @@ struct Dependency {
 	Morphism<DependentT(Ts...)> _m;
 
 	Set<DependentT> target;
+	DependentT new_value;
 
 public:
 
@@ -60,8 +116,12 @@ public:
 			  , std::tuple<Get<Ts>...> vs
 	) : target(t), _m(f), values(vs) {}
 
+	void calculate() {
+		new_value = apply_from_tuple(_m, values);
+	}
+
 	void update() {
-		target.update(apply_from_tuple(_m, values));
+		target.update(new_value);
 	}
 };
 
@@ -79,6 +139,7 @@ decltype(auto) apply_from_tuple(F&& fn, Tuple&& t)
 {
 	std::size_t constexpr tSize
 		= std::tuple_size<typename std::remove_reference<Tuple>::type>::value;
+
 	return apply_tuple_impl(std::forward<F>(fn),
 		std::forward<Tuple>(t),
 		std::make_index_sequence<tSize>());
@@ -119,6 +180,7 @@ public:
 		values = std::make_tuple(vs...);
 	}
 
+	// Inputs to function must match sources
 	template <class F>
 	auto use(F f) -> Morph<decltype(apply_from_tuple(f, values)), Ts...> {
 

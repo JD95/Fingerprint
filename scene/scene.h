@@ -4,6 +4,8 @@
 
 #include <SDL.h>
 
+#include "../reactive/source.h"
+
 using std::vector;
 using std::function;
 
