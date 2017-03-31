@@ -145,6 +145,11 @@ public:
 		glClearColor(0.0, 0.0, 0.0, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
+
+		// Because this isn't enabled by default...you fuckers
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		SDL_GL_SwapWindow(mainWindow);
 		
 		bool loop = true;
