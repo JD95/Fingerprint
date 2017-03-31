@@ -1,8 +1,5 @@
 #include "SceneState.h"
 
-
-
-
 SceneState::SceneState()
 	: physics(20, 20, 0.0f, -9.81f)
 {

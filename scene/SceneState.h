@@ -19,6 +19,7 @@ constexpr float model_body_ratio = 1.23f;
 
 class SceneState
 {
+protected:
 	SlotMap<Entity> entities;
 	std::map<std::string, Polygon*> models; /**< Had to be raw pointers to prevent copy construction.*/
 	World physics;
