@@ -20,9 +20,6 @@
 using std::vector;
 using std::array;
 
-
-void move_character(Camera& c, SDL_Event event);
-
 template<class T>
 class Game {
 

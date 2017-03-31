@@ -56,6 +56,34 @@ public:
 	}
 };
 
+
+
+template <class T, class ...Ts>
+class DependencyList <T,Ts...> {
+	T dependent;
+	DependencyList<Ts...> rest;
+
+public:
+
+	DependencyList(T d, Ts... r)
+		: dependent(d), rest(r...) {}
+
+	void calculate() {
+		dependent.calculate();
+		rest.calculate();
+	}
+
+	void update() {
+		dependent.update();
+		rest.update();
+	}
+
+	template <class G>
+	DependencyList<G, T, Ts...> insert(G value) {
+		return DependencyList<G, T, Ts...>(value, *this);
+	}
+};
+
 template <class T>
 class DependencyList <T> {
 	T dependent;
@@ -71,31 +99,10 @@ public:
 	void update() {
 		dependent.update();
 	}
-};
-
-template <class T, class ...Ts>
-class DependencyList <T,Ts...> {
-	T dependent;
-	DependencyList<Ts...> rest;
-
-public:
-
-	DependencyList(T d, Ts... r)
-		: dependent(d), rest(r) {}
-
-	void calculate() {
-		dependent.calculate();
-		rest.calculate();
-	}
-
-	void update() {
-		dependent.update();
-		rest.update();
-	}
 
 	template <class G>
-	DependencyList<G, T, Ts...> insert(G value) {
-		return DependencyList<G, T, Ts...>(value, *this);
+	DependencyList<G, T> insert(G value) {
+		return DependencyList<G, T>(value, dependent);
 	}
 };
 
