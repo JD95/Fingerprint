@@ -8,12 +8,14 @@
 #include "../utilities/slotmap.h"
 #include "../physics/PhysObj.h"
 
+#include "../reactive/reactive.h"
+
 struct Entity
 {
 	object_id id;
 	Transform transform;
 	Polygon* model;
-	PhysObj* body;
+	Reactive<PhysObj*> body;
 
 	Entity();
 	~Entity();

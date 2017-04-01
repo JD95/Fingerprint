@@ -1,63 +1,61 @@
 #pragma once
 
-#include "../scene/scene.h"
+#include <tuple>
 
-/*!
-	A Reactive value is anything whose value is 
-	calculated by values from the previous frame.
-
-	@code
-	struct Unit {
-		Reactive<glm::vec2> position;
-	};
-
-	struct demo {
-		Unit objA;
-		Unit objB;
-	};
-
-	update_t<glm::vec2&> five_away_from(const glm::vec2& other) {
-		return [=](glm::vec2& attr) {
-			attr = glm::vec2(other[0] + 5, other[1] + 5);
-		};
-	}
-
-	void game_updates(vector<update>& updates, const demo& prev) {
-		updates.push_back(prev.objA.position(five_away_from(prev.objB.position)));
-	}
-	@endcode
-
-*/
 template <class T>
-struct Reactive
-{
-	T value; /**< The reactive value.*/
-
-	Reactive()
-	{
+class Get {
+	T* source;
+public:
+	T value() {
+		return *source;
 	}
-
-	Reactive(const T& v) {
-		value = v;
-	}
-
-	~Reactive()
-	{
-	}
-
-	/*!
-		Generates a callback to update value using the function f.
-	*/
-	update operator()(update_t<T&> f) const {
-		return [f,this]() {
-			// Cheating here so game state
-			// in the construct update function 
-			// can be const
-			f(const_cast<T&>(value));
-		};
-	}
-
-	operator T() const { return value; }
-	operator T&() { return value; }
+	Get() : source(NULL) {}
+	Get(T* s) : source(s) {}
+	Get(const Get& other) { this->source = other.source; }
 };
 
+template <class T>
+class Set {
+	T* source;
+public:
+	void update(T new_value) {
+		*source = new_value;
+	}
+	Set() : source(NULL) {}
+	Set(T* s) : source(s) {}
+	Set(const Set& other) { this->source = other.source; }
+};
+
+template <class T>
+struct Reactive {
+	T value;
+
+	Reactive() {}
+	Reactive(T t) { value = t; }
+	Reactive(const Reactive<T>& other) { value = other.value; }
+
+	void operator=(const T& t) { value = t; }
+	Get<T> getter() { return Get<T>(&value); }
+	Set<T> setter() { return Set<T>(&value); }
+
+};
+
+// Borrowed from http://www.cppsamples.com/common-tasks/apply-tuple-to-function.html
+
+template<typename F, typename Tuple, size_t ...S >
+decltype(auto) apply_sources_impl(F&& fn, Tuple&& t, std::index_sequence<S...>)
+{
+	// NOTE: Has been modified from source to expect Get values and dereference them!
+	return std::forward<F>(fn)((std::get<S>(std::forward<Tuple>(t)).value())...);
+}
+
+template<typename F, typename Tuple>
+decltype(auto) apply_from_sources(F&& fn, Tuple&& t)
+{
+	std::size_t constexpr tSize
+		= std::tuple_size<typename std::remove_reference<Tuple>::type>::value;
+
+	return apply_sources_impl(std::forward<F>(fn),
+		std::forward<Tuple>(t),
+		std::make_index_sequence<tSize>());
+}

@@ -1,43 +1,41 @@
 #pragma once
 #include <functional>
 #include <vector>
+#include <memory>
 
 #include <SDL.h>
 
 #include "../reactive/source.h"
+#include "SceneState.h"
 
 using std::vector;
 using std::function;
 
-template <class T>
-using update_t = function<void(T)>;
-
-using update = function<void()>;
-
-template <class State>
+template<class T, 
+	typename = std::enable_if_t<std::is_base_of<SceneState, T>::value>>
 class Scene
 {
-	function<void(
-		vector<update_t<State&>>&,		// Updates to run
-		const vector<SDL_Event>&,		// Keyboard Events
-		const State&					// The previous frame's state
-		)> construct_updates;
-
-	vector<update_t<State&>> updates;
+	vector<std::unique_ptr<Updater>> updates;
 
 public:
 
-	State st;
+	T st;
 	
-	Scene() {}
+	Scene() {
+		st.construct_updates(updates);
+	}
 
 	~Scene() {}
 
 	void update(const vector<SDL_Event>& keyboard_events) {
-		st.construct_updates(updates, keyboard_events, st);
-		for (auto update : updates) update(st);
-		st.render_scene(st.main_camera);
-		updates.clear();
+		st.keyboard_events = keyboard_events;
+		for (auto& update : updates) {
+			update->calculate();
+		}
+		for (auto& update : updates) {
+			update->update();
+		}
+		st.render_scene(st.main_camera.value);
 	}
 };
 

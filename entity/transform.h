@@ -3,11 +3,13 @@
 #include <glm.hpp>
 #include <gtc\quaternion.hpp>
 
+#include "../reactive/reactive.h"
+
 struct Transform
 {
-	glm::vec3 position;
-	glm::vec3 scale;
-	glm::quat rotation;
+	Reactive<glm::vec3> position;
+	Reactive<glm::vec3> scale;
+	Reactive<glm::quat> rotation;
 
 
 	Transform();
