@@ -55,6 +55,24 @@ Entity * SceneState::spawn_massless(Model model, float layer, float x, float y, 
 		Transform(glm::vec3(x + model_width, y + model_height, layer), glm::vec3(model_width, model_height, 1.0f)));
 }
 
+Entity * SceneState::gui_spawn(Model model, float x, float y, float width, float height)
+{
+	auto new_entity_id = gui_entities.create_object();
+	auto new_entity = gui_entities.get_object(new_entity_id);
+	new_entity->transform = Transform(glm::vec3(x,y,0), glm::vec3(width, height, 1.0f));
+
+	if (models.find(model.model_name) == models.end()) {
+		auto new_model = new Polygon(model.model_name, model.tex_coords);
+		models.emplace(model.model_name, new_model);
+	}
+
+	new_entity->model = models[model.model_name];
+
+	return new_entity;
+}
+
+
+
 void SceneState::render_scene(Camera camera)
 {
 	physics.step();
@@ -70,5 +88,16 @@ void SceneState::render_scene(Camera camera)
 					 * entity.transform.model_matrix();
 
 			entity.model->render(mvp);
+	}
+
+	// Renders all entities which have in-use ids
+	for (int i = gui_entities.id_list[0]; i < gui_entities.first_free_index; i++) {
+
+		auto entity = gui_entities.object_table[i / gui_entities.chunk_size][i % gui_entities.chunk_size];
+
+		// Don't apply camera transforms
+		auto mvp = entity.transform.model_matrix();
+
+		entity.model->render(mvp);
 	}
 }

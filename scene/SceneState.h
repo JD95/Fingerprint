@@ -25,6 +25,7 @@ class SceneState
 protected:
 	World physics;
 	SlotMap<Entity> entities;
+	SlotMap<Entity> gui_entities;
 	std::map<std::string, Polygon*> models; /**< Had to be raw pointers to prevent copy construction.*/
 
 public:
@@ -38,6 +39,7 @@ public:
 	Entity* spawn(Model model, Transform transform, PhysObj body);
 	Entity* spawn_body(Model model, float layer, float x, float y, float width, float height, float mass);
 	Entity* spawn_massless(Model model, float layer, float x, float y, float width, float height);
+	Entity* gui_spawn(Model model, float x, float y, float width, float height);
 	void render_scene(Camera camera);
 	virtual void construct_updates(vector<Updater>& updates) {}
 };
