@@ -101,3 +101,18 @@ void SceneState::render_scene(Camera camera)
 		entity.model->render(mvp);
 	}
 }
+
+glm::vec2 SceneState::get_grav_norm()
+{
+	glm::vec2 temp = physics.gravity_acc;
+	if (glm::abs(temp.x) > glm::abs(temp.y))
+		if (temp.x > 0.0f)
+			return glm::vec2(1, 0);
+		else
+			return glm::vec2(-1, 0);
+	else
+		if (temp.y > 0.0f)
+			return glm::vec2(0, 1);
+		else
+			return glm::vec2(0, -1);
+}

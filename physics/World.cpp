@@ -24,18 +24,22 @@ void World::step()
 	
 	//create manifold for collision use, same manifold used repeatedly
 	Manifold m;
+	
+	//begin verlet integrations, most likely will be a for loop for all objects
+	for (auto& object : objects)
+	{
+		object.add_gravity(gravity_acc);
+		object.normals_acting.clear();
+	}
 
 	std::vector<PhysObj> check_objects;
 	for (size_t concern = 0; concern < objects.size(); concern++) {
 
+		
 		//clear the check objects list
 		check_objects.clear();
 		//with regards to object of concern, check which quadtree division hosts it
 		check_objects = quad.retrieve(objects[concern]);
-
-		//begin verlet integrations, most likely will be a for loop for all objects
-		for (auto& object : objects)
-			object.add_gravity(gravity_acc);
 
 		//check collisions of all objects that are proximate to the target object
 		for (size_t i = 0; i < check_objects.size(); i++)

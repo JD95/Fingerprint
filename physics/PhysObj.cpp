@@ -99,15 +99,6 @@ https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics
 
 */
 inline void resolve_friction(Manifold& m, float e) {
-	//if (abs(m.A->velocity.x) > .001)
-	{
-		//m.A->velocity.x -= m.A->velocity.x * 0.05f;
-	}
-	//else
-	{
-		//m.A->velocity.x = 0.0f;
-	}
-
 
 	// Re-calculate relative velocity after normal impulse
 	// is applied (impulse from first article, this code comes
@@ -244,6 +235,7 @@ bool AABB_vs_AABB(Manifold& m)
 
 	float x_overlap = a_half + b_half - abs(n.x);
 
+	glm::vec2 temp_norm; 
 	//Separation Axis theorem
 	if (x_overlap > 0)
 	{
@@ -258,9 +250,17 @@ bool AABB_vs_AABB(Manifold& m)
 			if (x_overlap < y_overlap)				// x has the least
 			{
 				if (n.x < 0)
-					m.normal = glm::vec2(-1, 0);
+				{
+					temp_norm = glm::vec2(-1, 0);
+					m.normal = temp_norm;
+					A->normals_acting.push_back(temp_norm);
+				}
 				else
-					m.normal = glm::vec2(1, 0);
+				{
+					temp_norm = glm::vec2(1, 0);
+					m.normal = temp_norm;
+					A->normals_acting.push_back(temp_norm);
+				}
 
 				m.penetration = x_overlap;
 				return true;
@@ -268,9 +268,18 @@ bool AABB_vs_AABB(Manifold& m)
 			else									// y has the least
 			{
 				if (n.y < 0)
-					m.normal = glm::vec2(0, -1);
+				{
+					temp_norm = glm::vec2(0, -1);
+					m.normal = temp_norm;
+					A->normals_acting.push_back(temp_norm);
+				}
 				else
-					m.normal = glm::vec2(0, 1);
+				{
+					temp_norm = glm::vec2(0, 1);
+					m.normal = temp_norm;
+					A->normals_acting.push_back(temp_norm);
+				}
+
 
 				m.penetration = y_overlap;
 				return true;

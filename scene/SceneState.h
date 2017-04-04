@@ -42,4 +42,6 @@ public:
 	Entity* gui_spawn(Model model, float x, float y, float width, float height);
 	void render_scene(Camera camera);
 	virtual void construct_updates(vector<Updater>& updates) {}
+
+	glm::vec2 get_grav_norm();
 };

@@ -1,6 +1,7 @@
 #include "glm.hpp"
 #include <iostream>
 #include <algorithm>
+#include <vector>
 
 #include "CollObj.h"
 
@@ -33,6 +34,8 @@ public:
 	glm::vec2 velocity;
 	float static_friction = 0.5;
 	float dynamic_friction = 1.0;
+
+	std::vector<glm::vec2> normals_acting;
 
 	//Used for time controlling elements
 	float original_time;
