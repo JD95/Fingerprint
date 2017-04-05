@@ -11,7 +11,7 @@ private:
 	int MAX_LEVELS = 5;
 
 	int level;
-	std::vector <PhysObj> objects;
+	std::vector <PhysObj*>  objects;
 	AABB bounds;
 	std::vector <Quadtree> nodes;	
 
@@ -22,9 +22,9 @@ public:
 
 	void clear();
 	void split();
-	int getIndex(PhysObj the_object);
-	void insert(PhysObj the_object);
-	std::vector<PhysObj> retrieve(PhysObj the_object);
+	int getIndex(PhysObj * the_object);
+	void insert(PhysObj * the_object);
+	std::vector<PhysObj*> retrieve(PhysObj * the_object);
 
 };
 

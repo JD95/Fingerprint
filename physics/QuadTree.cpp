@@ -46,22 +46,22 @@ void Quadtree::split()
 
 }
 
-int Quadtree::getIndex(PhysObj the_object)
+int Quadtree::getIndex(PhysObj * the_object)
 {
 	int index = -1;
-	if (the_object.shape.type)		//is a circle
+	if (the_object->shape.type)		//is a circle
 	{
 		
 		double verticalMidpoint = bounds.min.x + (bounds.width / 2);
 		double horizontalMidpoint = bounds.min.y + (bounds.height / 2);
 
 		// Object can completely fit within the top quadrants
-		bool topQuadrant = (the_object.position.x < horizontalMidpoint && the_object.position.y + the_object.shape.get_coll().Rect.height < horizontalMidpoint);
+		bool topQuadrant = (the_object->position.x < horizontalMidpoint && the_object->position.y + the_object->shape.get_coll().Rect.height < horizontalMidpoint);
 		// Object can completely fit within the bottom quadrants
-		bool bottomQuadrant = (the_object.shape.get_coll().Rect.min.y > horizontalMidpoint);
+		bool bottomQuadrant = (the_object->shape.get_coll().Rect.min.y > horizontalMidpoint);
 
 		// Object can completely fit within the left quadrants
-		if (the_object.shape.get_coll().Rect.min.x < verticalMidpoint && the_object.shape.get_coll().Rect.min.x + the_object.shape.get_coll().Rect.height < verticalMidpoint) {
+		if (the_object->shape.get_coll().Rect.min.x < verticalMidpoint && the_object->shape.get_coll().Rect.min.x + the_object->shape.get_coll().Rect.height < verticalMidpoint) {
 			if (topQuadrant) {
 				index = 1;
 			}
@@ -70,7 +70,7 @@ int Quadtree::getIndex(PhysObj the_object)
 			}
 		}
 		// Object can completely fit within the right quadrants
-		else if (the_object.shape.get_coll().Rect.min.x > verticalMidpoint) {
+		else if (the_object->shape.get_coll().Rect.min.x > verticalMidpoint) {
 			if (topQuadrant) {
 				index = 0;
 			}
@@ -85,12 +85,12 @@ int Quadtree::getIndex(PhysObj the_object)
 		double horizontalMidpoint = bounds.min.y + (bounds.height / 2);
 
 		// Object can completely fit within the top quadrants
-		bool topQuadrant = (the_object.position.x < horizontalMidpoint && the_object.position.y + the_object.shape.get_coll().Circle.radius < horizontalMidpoint);
+		bool topQuadrant = (the_object->position.x < horizontalMidpoint && the_object->position.y + the_object->shape.get_coll().Circle.radius < horizontalMidpoint);
 		// Object can completely fit within the bottom quadrants
-		bool bottomQuadrant = (the_object.shape.get_coll().Circle.position.y + the_object.shape.get_coll().Circle.radius > horizontalMidpoint);
+		bool bottomQuadrant = (the_object->shape.get_coll().Circle.position.y + the_object->shape.get_coll().Circle.radius > horizontalMidpoint);
 
 		// Object can completely fit within the left quadrants
-		if (the_object.shape.get_coll().Circle.position.x + the_object.shape.get_coll().Circle.radius < verticalMidpoint && the_object.shape.get_coll().Circle.position.x + the_object.shape.get_coll().Circle.radius < verticalMidpoint) {
+		if (the_object->shape.get_coll().Circle.position.x + the_object->shape.get_coll().Circle.radius < verticalMidpoint && the_object->shape.get_coll().Circle.position.x + the_object->shape.get_coll().Circle.radius < verticalMidpoint) {
 			if (topQuadrant) {
 				index = 1;
 			}
@@ -99,7 +99,7 @@ int Quadtree::getIndex(PhysObj the_object)
 			}
 		}
 		// Object can completely fit within the right quadrants
-		else if (the_object.shape.get_coll().Circle.position.x + the_object.shape.get_coll().Circle.radius > verticalMidpoint) {
+		else if (the_object->shape.get_coll().Circle.position.x + the_object->shape.get_coll().Circle.radius > verticalMidpoint) {
 			if (topQuadrant) {
 				index = 0;
 			}
@@ -112,7 +112,7 @@ int Quadtree::getIndex(PhysObj the_object)
 	return index;
 }
 
-void Quadtree::insert(PhysObj the_object)
+void Quadtree::insert(PhysObj * the_object)
 {
 	//check to see if the current quad node has already been split
 	if (!nodes.empty())
@@ -134,26 +134,21 @@ void Quadtree::insert(PhysObj the_object)
 		if (nodes.empty())
 			split();
 
-		std::vector<PhysObj>::iterator it = objects.begin();
-		while (it != objects.end())
+		for (int i = 0; i < objects.size(); i++)
 		{
-			int index = getIndex(*it);
+			int index = getIndex(objects[i]);
 
 			if (index != -1)
 			{
-				nodes[index].insert(*it);
-				it = objects.erase(it);
-			}
-			else
-			{
-				++it;
+				nodes[index].insert(objects[i]);
+				objects.erase(objects.begin() + i);
 			}
 		}
 	}
 
 }
 
-std::vector<PhysObj> Quadtree::retrieve(PhysObj the_object)
+std::vector<PhysObj*> Quadtree::retrieve(PhysObj * the_object)
 {
 	int index = getIndex(the_object);
 
@@ -162,7 +157,6 @@ std::vector<PhysObj> Quadtree::retrieve(PhysObj the_object)
 		nodes[index].retrieve(the_object);
 	}
 
-	std::vector<PhysObj> objectsFound = objects;
-	
-	return objectsFound;
+	return objects;
+	//return objectsFound;
 }

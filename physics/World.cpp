@@ -19,7 +19,7 @@ void World::step()
 	quad.clear();
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		quad.insert(objects[i]);
+		quad.insert(&objects[i]);
 	}
 	
 	//create manifold for collision use, same manifold used repeatedly
@@ -32,24 +32,27 @@ void World::step()
 		object.normals_acting.clear();
 	}
 
-	std::vector<PhysObj> check_objects;
-	for (size_t concern = 0; concern < objects.size(); concern++) {
+	std::vector<PhysObj*> check_objects;
+	for (int concern = 0; concern < objects.size(); concern++) {
 
 		
 		//clear the check objects list
 		check_objects.clear();
 		//with regards to object of concern, check which quadtree division hosts it
-		check_objects = quad.retrieve(objects[concern]);
+		check_objects = quad.retrieve(&objects[concern]);
 
 		//check collisions of all objects that are proximate to the target object
-		for (size_t i = 0; i < check_objects.size(); i++)
+		for (int i = 0; i < check_objects.size(); i++)
 		{
 			if (i == concern)
 				continue;
 			else
 			{
-				m.A = &objects[i];
-				m.B = &objects[concern];
+				if (objects[i].mass.mass == 2.0)
+					int what = 1;
+
+				m.A = &objects[concern];
+				m.B = check_objects[i];
 
 				//Check actual colliosns
 				//TODO: 

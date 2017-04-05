@@ -32,8 +32,8 @@ public:
 	MassData mass;
 	glm::vec2 acceleration;
 	glm::vec2 velocity;
-	float static_friction = 0.5;
-	float dynamic_friction = 1.0;
+	float static_friction = 0.7;
+	float dynamic_friction = 0.1;
 
 	std::vector<glm::vec2> normals_acting;
 
@@ -84,8 +84,11 @@ bool Collide(Manifold& m);
 //calculates and verifies the collisions of two AABB. Claculates normal and penetration
 bool AABB_vs_AABB(Manifold& m);
 
+bool AABB_vs_AABB_UnO(Manifold& m);
+
 bool Circle_vs_Circle(Manifold *m);
 
 bool Circle_vs_AABB(Manifold *m);
 
 bool AABB_vs_Circle(Manifold *m);
+

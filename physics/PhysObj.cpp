@@ -134,8 +134,8 @@ inline void resolve_friction(Manifold& m, float e) {
 		std::cout << "Too much friction_impulse!";
 
 	// Apply
-	m.A->velocity -= (m.A->mass.inv_mass) * friction_impulse;
-	m.B->velocity -= (m.B->mass.inv_mass) * friction_impulse;
+	m.A->velocity += (m.A->mass.inv_mass) * friction_impulse;
+	m.B->velocity += (m.B->mass.inv_mass) * friction_impulse;
 };
 
 void calculate_resolution(Manifold& m)
@@ -287,4 +287,13 @@ bool AABB_vs_AABB(Manifold& m)
 		}
 	}
 	return false;
+}
+
+bool AABB_vs_AABB_UnO(Manifold& m)
+{
+	//checks to see if most basic of intersection is happening
+	if (m.A->shape.get_coll().Rect.max.x <= m.B->shape.get_coll().Rect.min.x || m.A->shape.get_coll().Rect.min.x >= m.B->shape.get_coll().Rect.max.x) return false;
+	else if (m.A->shape.get_coll().Rect.max.y <= m.B->shape.get_coll().Rect.min.y || m.A->shape.get_coll().Rect.min.y >= m.B->shape.get_coll().Rect.max.y) return false;
+	else //if an intersection then run heavy code
+		return AABB_vs_AABB(m);
 }
