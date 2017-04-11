@@ -42,24 +42,24 @@ void World::step()
 		check_objects = quad.retrieve(&objects[concern]);
 
 		//check collisions of all objects that are proximate to the target object
-		for (int i = 0; i < check_objects.size(); i++)
+		//for (int i = 0; i < check_objects.size(); i++)
+		for (int i = 0; i < objects.size(); i++)
 		{
-			if (i == concern)
+			//Checks to see if the pointer matches the address of the original object so as to avoid checking colliding with self
+			if (concern == i)//check_objects[i] == &objects[concern])
 				continue;
-			else
 			{
 				if (objects[i].mass.mass == 2.0)
 					int what = 1;
 
 				m.A = &objects[concern];
-				m.B = check_objects[i];
+				m.B = &objects[i];;//check_objects[i];
 
 				//Check actual colliosns
 				//TODO: 
 				//	make it so that there is an initial simple check then a more in depth check
 				if (Collide(m))
 				{
-
 					calculate_resolution(m);
 					sink_correction(m);
 				}
@@ -68,7 +68,10 @@ void World::step()
 	}
 
 	for (auto& object : objects)
+	{
 		object.calculate_positon();
+		//object.print_out_info();
+	}
 }
 
 PhysObj* World::add_object(PhysObj object_in)

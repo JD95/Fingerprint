@@ -1,7 +1,5 @@
 #include "PhysObj.h"
 
-
-
 //PhysObj functions
 PhysObj::PhysObj()
 {
@@ -24,8 +22,6 @@ PhysObj::PhysObj(float pos_x, float pos_y, float m, float width, float height, f
 	time_step = step;
 	original_time = step;
 
-	static_friction = 1.0f;
-	dynamic_friction = 1.0f;
 }
 
 PhysObj::PhysObj(float pos_x, float pos_y, float m, float radius, float step)
@@ -43,8 +39,6 @@ PhysObj::PhysObj(float pos_x, float pos_y, float m, float radius, float step)
 	time_step = step;
 	original_time = step;
 
-	static_friction = 1.0f;
-	dynamic_friction = 1.0f;
 }
 
 void PhysObj::add_force(float fx, float fy)
@@ -52,17 +46,17 @@ void PhysObj::add_force(float fx, float fy)
 	force += glm::vec2(fx, fy);
 }
 
-void PhysObj::reset_object()
-{
-	force = glm::vec2(0, 0);
-	acceleration = glm::vec2(0, 0);
-	velocity = glm::vec2(0, 0);
-}
+//void PhysObj::reset_object()
+//{
+//	force = glm::vec2(0, 0);
+//	acceleration = glm::vec2(0, 0);
+//	velocity = glm::vec2(0, 0);
+//}
 
-void PhysObj::reset_force(float x, float y)
-{
-	force = glm::vec2(x, y);
-}
+//void PhysObj::reset_force(float x, float y)
+//{
+//	force = glm::vec2(x, y);
+//}
 
 void PhysObj::add_gravity(glm::vec2 gravity)
 {
@@ -93,12 +87,23 @@ float pythagorean_solve(float a, float b) {
 	return glm::sqrt((a*a) + (b*b));
 }
 
-/*!
-Based on tutorial from
-https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-friction-scene-and-jump-table--gamedev-7756
+inline void resolve_friction(Manifold& m, float e, float j) {
 
-*/
-inline void resolve_friction(Manifold& m, float e) {
+	/*float min_fric = std::min(m.A->static_friction, m.B->static_friction);
+	if (m.normal.x != 0)
+	{
+		if (m.A->velocity.x > .1)
+			m.A->velocity.x = 0;
+		else
+			m.A->velocity.x -= m.A->velocity.x * min_fric;
+	}
+	else
+	{
+		if (m.A->velocity.y > .1)
+			m.A->velocity.y = 0;
+		else
+			m.A->velocity.y -= m.A->velocity.y * min_fric;
+	}*/
 
 	// Re-calculate relative velocity after normal impulse
 	// is applied (impulse from first article, this code comes
@@ -109,8 +114,8 @@ inline void resolve_friction(Manifold& m, float e) {
 	auto t_pre = rv - (glm::dot(rv, m.normal) * m.normal);
 	glm::vec2 t = (!t_pre[0] && !t_pre[1]) ? glm::vec2(0.0f, 0.0f) : glm::normalize(t_pre);
 
-	float j = -(1 + e) * glm::dot(rv, m.normal);
-	j /= (m.A->mass.inv_mass + m.B->mass.inv_mass);
+	//float j = -(1 + e) * glm::dot(rv, m.normal);
+	//j /= (m.A->mass.inv_mass + m.B->mass.inv_mass);
 
 
 	// Solve for magnitude to apply along the friction vector
@@ -124,7 +129,7 @@ inline void resolve_friction(Manifold& m, float e) {
 	// Clamp magnitude of friction and create impulse vector
 	glm::vec2 friction_impulse;
 	if (abs(jt) < j * mu)
-		friction_impulse = jt * t;
+		friction_impulse = glm::vec2(0,0); // jt * t;
 	else
 	{
 		friction_impulse = -j * t * pythagorean_solve(m.A->dynamic_friction, m.B->dynamic_friction);
@@ -134,9 +139,16 @@ inline void resolve_friction(Manifold& m, float e) {
 		std::cout << "Too much friction_impulse!";
 
 	// Apply
-	m.A->velocity += (m.A->mass.inv_mass) * friction_impulse;
+	m.A->velocity -= (m.A->mass.inv_mass) * friction_impulse;
 	m.B->velocity += (m.B->mass.inv_mass) * friction_impulse;
-};
+}
+
+
+/*!
+Based on tutorial from
+https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-friction-scene-and-jump-table--gamedev-7756
+
+*/
 
 void calculate_resolution(Manifold& m)
 {
@@ -170,9 +182,8 @@ void calculate_resolution(Manifold& m)
 	m.B->velocity += ratio * impulse;
 
 
-
 	// Stop acceleration when come in contact with an object
-	if (m.normal.x == 0) //affecting y direction
+	if (m.normal.x == 0 || m.normal.y ==0) //affecting y direction
 	{
 		float temp = m.A->acceleration.x;
 		m.A->acceleration = glm::vec2(temp, 0);
@@ -183,8 +194,9 @@ void calculate_resolution(Manifold& m)
 		m.A->acceleration = glm::vec2(0, temp);
 	}
 
-	resolve_friction(m, e);
+	resolve_friction(m, e, j);
 }
+
 
 void sink_correction(Manifold & m)
 {
@@ -198,13 +210,15 @@ void sink_correction(Manifold & m)
 //-------Utility functions-------
 void PhysObj::print_out_info()
 {
-	std::cout << "x / y; " << position.x << " " << position.y << "\n";
-	std::cout << "velocity: " << velocity.x << " " << velocity.y << "\n";
-	std::cout << "time step: " << time_step << "\n";
-	std::cout << "mass: " << mass.mass << "\n";
-	std::cout << "forces: " << force.x << " " << force.y << "\n";
-	std::cout << "accel: " << acceleration.x << " " << acceleration.y << "\n";
-	std::cout << "\n\n";
+	std::ofstream myfile;
+	myfile.open("physics_log.txt", std::fstream::in | std::fstream::app);
+	myfile << "x / y; " << position.x << " " << position.y << "\n";
+	myfile << "velocity: " << velocity.x << " " << velocity.y << "\n";
+	myfile << "time step: " << time_step << "\n";
+	myfile << "mass: " << mass.mass << "\n";
+	myfile << "forces: " << force.x << " " << force.y << "\n";
+	myfile << "accel: " << acceleration.x << " " << acceleration.y << "\n";
+	myfile << "\n\n";
 
 }
 
@@ -214,6 +228,15 @@ bool Collide(Manifold& m)
 		return AABB_vs_AABB(m);
 
 	return false;
+}
+
+bool AABB_vs_AABB_UnO(Manifold& m)
+{
+	//checks to see if most basic of intersection is happening
+	if (m.A->shape.get_coll().Rect.max.x <= m.B->shape.get_coll().Rect.min.x || m.A->shape.get_coll().Rect.min.x >= m.B->shape.get_coll().Rect.max.x) return false;
+	else if (m.A->shape.get_coll().Rect.max.y <= m.B->shape.get_coll().Rect.min.y || m.A->shape.get_coll().Rect.min.y >= m.B->shape.get_coll().Rect.max.y) return false;
+	else //if an intersection then run heavy code
+		return AABB_vs_AABB_UnO(m);
 }
 
 bool AABB_vs_AABB(Manifold& m)
@@ -289,11 +312,3 @@ bool AABB_vs_AABB(Manifold& m)
 	return false;
 }
 
-bool AABB_vs_AABB_UnO(Manifold& m)
-{
-	//checks to see if most basic of intersection is happening
-	if (m.A->shape.get_coll().Rect.max.x <= m.B->shape.get_coll().Rect.min.x || m.A->shape.get_coll().Rect.min.x >= m.B->shape.get_coll().Rect.max.x) return false;
-	else if (m.A->shape.get_coll().Rect.max.y <= m.B->shape.get_coll().Rect.min.y || m.A->shape.get_coll().Rect.min.y >= m.B->shape.get_coll().Rect.max.y) return false;
-	else //if an intersection then run heavy code
-		return AABB_vs_AABB(m);
-}

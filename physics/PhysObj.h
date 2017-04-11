@@ -2,6 +2,8 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "CollObj.h"
 
@@ -32,7 +34,7 @@ public:
 	MassData mass;
 	glm::vec2 acceleration;
 	glm::vec2 velocity;
-	float static_friction = 0.7;
+	float static_friction = 0.9;
 	float dynamic_friction = 0.1;
 
 	std::vector<glm::vec2> normals_acting;
