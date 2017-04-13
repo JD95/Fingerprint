@@ -134,7 +134,7 @@ void Quadtree::insert(PhysObj * the_object)
 		if (nodes.empty())
 			split();
 
-		for (int i = 0; i < objects.size(); i++)
+		for (size_t i = 0; i < objects.size(); i++)
 		{
 			int index = getIndex(objects[i]);
 

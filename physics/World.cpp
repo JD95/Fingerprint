@@ -33,7 +33,7 @@ void World::step()
 	}
 
 	std::vector<PhysObj*> check_objects;
-	for (int concern = 1; concern < objects.size(); concern++) {
+	for (size_t concern = 1; concern < objects.size(); concern++) {
 
 		
 		//clear the check objects list
@@ -43,7 +43,7 @@ void World::step()
 
 		//check collisions of all objects that are proximate to the target object
 		//for (int i = 0; i < check_objects.size(); i++)
-		for (int i = 0; i < check_objects.size(); i++)
+		for (size_t i = 0; i < check_objects.size(); i++)
 		{
 			//Checks to see if the pointer matches the address of the original object so as to avoid checking colliding with self
 			if (check_objects[i] == &objects[concern])
