@@ -6,7 +6,6 @@ PhysObj::PhysObj()
 
 }
 
-
 PhysObj::PhysObj(float pos_x, float pos_y, float m, float width, float height, float step)
 {
 	position = glm::vec2(pos_x, pos_y);
@@ -46,17 +45,17 @@ void PhysObj::add_force(float fx, float fy)
 	force += glm::vec2(fx, fy);
 }
 
-//void PhysObj::reset_object()
-//{
-//	force = glm::vec2(0, 0);
-//	acceleration = glm::vec2(0, 0);
-//	velocity = glm::vec2(0, 0);
-//}
+void PhysObj::reset_object()
+{
+	force = glm::vec2(0, 0);
+	acceleration = glm::vec2(0, 0);
+	velocity = glm::vec2(0, 0);
+}
 
-//void PhysObj::reset_force(float x, float y)
-//{
-//	force = glm::vec2(x, y);
-//}
+void PhysObj::reset_force(float x, float y)
+{
+	force = glm::vec2(x, y);
+}
 
 void PhysObj::add_gravity(glm::vec2 gravity)
 {
@@ -89,22 +88,6 @@ float pythagorean_solve(float a, float b) {
 
 inline void resolve_friction(Manifold& m, float e, float j) {
 
-	/*float min_fric = std::min(m.A->static_friction, m.B->static_friction);
-	if (m.normal.x != 0)
-	{
-		if (m.A->velocity.x > .1)
-			m.A->velocity.x = 0;
-		else
-			m.A->velocity.x -= m.A->velocity.x * min_fric;
-	}
-	else
-	{
-		if (m.A->velocity.y > .1)
-			m.A->velocity.y = 0;
-		else
-			m.A->velocity.y -= m.A->velocity.y * min_fric;
-	}*/
-
 	// Re-calculate relative velocity after normal impulse
 	// is applied (impulse from first article, this code comes
 	// directly thereafter in the same resolve function)
@@ -114,12 +97,8 @@ inline void resolve_friction(Manifold& m, float e, float j) {
 	auto t_pre = rv - (glm::dot(rv, m.normal) * m.normal);
 	glm::vec2 t = (!t_pre[0] && !t_pre[1]) ? glm::vec2(0.0f, 0.0f) : glm::normalize(t_pre);
 
-	//float j = -(1 + e) * glm::dot(rv, m.normal);
-	//j /= (m.A->mass.inv_mass + m.B->mass.inv_mass);
-
-
 	// Solve for magnitude to apply along the friction vector
-	float jt = -glm::dot(rv, -t);
+	float jt = glm::dot(rv, -t);			// bug was here, there was an unneeded /- sign before the dot
 	jt = jt / (m.A->mass.inv_mass + m.B->mass.inv_mass);
 
 	// PythagoreanSolve = A^2 + B^2 = C^2, solving for C given A and B
@@ -129,7 +108,7 @@ inline void resolve_friction(Manifold& m, float e, float j) {
 	// Clamp magnitude of friction and create impulse vector
 	glm::vec2 friction_impulse;
 	if (abs(jt) < j * mu)
-		friction_impulse = glm::vec2(0,0); // jt * t;
+		friction_impulse = jt * t; // jt * t;
 	else
 	{
 		friction_impulse = -j * t * pythagorean_solve(m.A->dynamic_friction, m.B->dynamic_friction);
@@ -149,7 +128,6 @@ Based on tutorial from
 https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-friction-scene-and-jump-table--gamedev-7756
 
 */
-
 void calculate_resolution(Manifold& m)
 {
 	glm::vec2 rv = m.B->velocity - m.A->velocity;
@@ -222,11 +200,13 @@ void PhysObj::print_out_info()
 
 }
 
+//------Collision Functions------
 bool Collide(Manifold& m)
 {
 	if (m.A->shape.type == 1 && m.B->shape.type == 1)			//both are rects
 		return AABB_vs_AABB(m);
-
+	else if (m.A->shape.type == 1 && m.B->shape.type == 0)
+		return AABB_vs_Circle(m);
 	return false;
 }
 
@@ -237,6 +217,11 @@ bool AABB_vs_AABB_UnO(Manifold& m)
 	else if (m.A->shape.get_coll().Rect.max.y <= m.B->shape.get_coll().Rect.min.y || m.A->shape.get_coll().Rect.min.y >= m.B->shape.get_coll().Rect.max.y) return false;
 	else //if an intersection then run heavy code
 		return AABB_vs_AABB_UnO(m);
+}
+
+bool AABB_vs_Circle(Manifold * m)
+{
+	return false;
 }
 
 bool AABB_vs_AABB(Manifold& m)
