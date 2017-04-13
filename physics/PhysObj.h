@@ -92,5 +92,5 @@ bool Circle_vs_Circle(Manifold *m);
 
 bool Circle_vs_AABB(Manifold *m);
 
-bool AABB_vs_Circle(Manifold *m);
+bool AABB_vs_Circle(Manifold& m);
 

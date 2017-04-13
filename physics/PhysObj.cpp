@@ -219,7 +219,7 @@ bool AABB_vs_AABB_UnO(Manifold& m)
 		return AABB_vs_AABB_UnO(m);
 }
 
-bool AABB_vs_Circle(Manifold * m)
+bool AABB_vs_Circle(Manifold& m)
 {
 	return false;
 }
