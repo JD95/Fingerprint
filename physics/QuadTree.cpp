@@ -38,10 +38,10 @@ void Quadtree::split()
 	float xU = float(bounds.min.x);
 	float yU = float(bounds.min.y);
 
-	nodes[0] = Quadtree(level + 1, AABB(xL, yL + subHeight, xU - subWidth, yU));	//NW	-	A
-	nodes[1] = Quadtree(level + 1, AABB(xL + subHeight, yL + subHeight, xU, yU));	//NE	-	B
-	nodes[2] = Quadtree(level + 1, AABB(xL, yL, xL + subWidth, xU + subHeight));	//SW	-	C
-	nodes[3] = Quadtree(level + 1, AABB(xL, yL + subWidth, xU, xU - subHeight));	//SE	-	D
+	nodes.push_back(Quadtree(level + 1, AABB(xL, yL + subHeight, xU - subWidth, yU)));	//NW	-	A
+	nodes.push_back(Quadtree(level + 1, AABB(xL + subHeight, yL + subHeight, xU, yU)));	//NE	-	B
+	nodes.push_back(Quadtree(level + 1, AABB(xL, yL, xL + subWidth, xU + subHeight)));	//SW	-	C
+	nodes.push_back(Quadtree(level + 1, AABB(xL, yL + subWidth, xU, xU - subHeight)));	//SE	-	D
 
 
 }
