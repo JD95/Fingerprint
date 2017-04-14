@@ -25,10 +25,10 @@ class SceneState
 protected:
 	World physics;
 	SlotMap<Entity> entities;
-	SlotMap<Entity> gui_entities;
 	std::map<std::string, Polygon*> models; /**< Had to be raw pointers to prevent copy construction.*/
 
 public:
+	SlotMap<Entity> gui_entities;
 	Reactive<Camera> main_camera;
 	Reactive<std::vector<SDL_Event>> keyboard_events;
 
