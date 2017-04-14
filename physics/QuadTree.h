@@ -7,7 +7,7 @@
 class Quadtree
 {
 private: 
-	int MAX_OBJECTS = 10;
+	int MAX_OBJECTS = 50;
 	int MAX_LEVELS = 5;
 
 	int level;
