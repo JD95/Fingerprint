@@ -6,6 +6,11 @@
 struct object_id {
 	long version;
 	long index;
+
+	friend bool operator==(const object_id& a, const object_id& b) {
+		return (a.index == b.index)
+			&& (a.version == b.version);
+	}
 };
 
 /*!

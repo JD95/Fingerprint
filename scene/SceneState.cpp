@@ -36,6 +36,8 @@ Entity * SceneState::spawn(Model model, Transform transform, PhysObj body)
 
 	new_entity->body = physics.add_object(body);
 
+	new_entity->body.value->entity_ID = new_entity->id;
+
 	return new_entity;
 }
 

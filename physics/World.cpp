@@ -30,6 +30,7 @@ void World::step()
 	{
 		object.add_gravity(gravity_acc);
 		object.normals_acting.clear();
+		object.collided_with.clear();
 	}
 
 	std::vector<PhysObj*> check_objects;

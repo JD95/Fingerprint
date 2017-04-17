@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "../utilities/SlotMap.h"
 #include "CollObj.h"
 
 #pragma once
@@ -36,6 +37,8 @@ public:
 	glm::vec2 velocity;
 	float static_friction = 0.7f;
 	float dynamic_friction = 0.5f;
+	object_id entity_ID;
+	std::vector<object_id> collided_with;
 
 	std::vector<glm::vec2> normals_acting;
 
@@ -73,6 +76,8 @@ struct Manifold {
 	float penetration;
 	glm::vec2 normal;
 };
+
+void add_obj_id(Manifold& m);
 
 //Calculates the resulting velocities following an impact
 void calculate_resolution(Manifold& m);

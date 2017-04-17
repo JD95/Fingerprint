@@ -7,37 +7,24 @@ PhysObj::PhysObj()
 }
 
 PhysObj::PhysObj(float pos_x, float pos_y, float m, float width, float height, float step)
+	: time_step(step), original_time(step), shape(Collider(pos_x, pos_y, width, height)), position(glm::vec2(pos_x, pos_y))
 {
-	position = glm::vec2(pos_x, pos_y);
-
 	mass.mass = m;
 	if (m == 0)
 		mass.inv_mass = 0;
 	else
 		mass.inv_mass = 1 / mass.mass;
-
-	shape = Collider(pos_x, pos_y, width, height);
-
-	time_step = step;
-	original_time = step;
 
 }
 
 PhysObj::PhysObj(float pos_x, float pos_y, float m, float radius, float step)
+	: time_step(step), original_time(step), shape(Collider(pos_x, pos_y, radius)), position(glm::vec2(pos_x, pos_y))
 {
-	position = glm::vec2(pos_x, pos_y);
-
 	mass.mass = m;
 	if (m == 0)
 		mass.inv_mass = 0;
 	else
 		mass.inv_mass = 1 / mass.mass;
-
-	shape = Collider(pos_x, pos_y, radius);
-
-	time_step = step;
-	original_time = step;
-
 }
 
 void PhysObj::add_force(float fx, float fy)
@@ -122,6 +109,13 @@ inline void resolve_friction(Manifold& m, float e, float j) {
 	m.B->velocity += (m.B->mass.inv_mass) * friction_impulse;
 }
 
+
+void add_obj_id(Manifold & m)
+{
+	if (std::find(m.A->collided_with.begin(), m.A->collided_with.end(), m.B->entity_ID) == m.A->collided_with.end()) {
+		m.A->collided_with.push_back(m.B->entity_ID);
+	}
+}
 
 /*!
 Based on tutorial from
@@ -219,6 +213,9 @@ bool AABB_vs_AABB_UnO(Manifold& m)
 		return AABB_vs_AABB_UnO(m);
 }
 
+//solutions?
+// http://www.metanetsoftware.com/technique/tutorialA.html#section3
+//
 bool AABB_vs_Circle(Manifold& m)
 {
 	return false;
@@ -271,6 +268,7 @@ bool AABB_vs_AABB(Manifold& m)
 				}
 
 				m.penetration = x_overlap;
+				add_obj_id(m);
 				return true;
 			}
 			else									// y has the least
@@ -290,6 +288,7 @@ bool AABB_vs_AABB(Manifold& m)
 
 
 				m.penetration = y_overlap;
+				add_obj_id(m);
 				return true;
 			}
 		}
