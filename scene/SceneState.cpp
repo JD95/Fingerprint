@@ -4,6 +4,7 @@ SceneState::SceneState()
 	: physics(20, 20, 0.0f, -9.81f)
 {
 	int x = 0;
+	time = 0;
 }
 
 
@@ -78,6 +79,7 @@ Entity * SceneState::gui_spawn(Model model, float x, float y, float width, float
 void SceneState::render_scene(Camera camera)
 {
 	physics.step();
+	time.value++;
 	auto chunks = entities.object_table.size();
 
 	// Renders all entities which have in-use ids

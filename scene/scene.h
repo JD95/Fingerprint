@@ -29,6 +29,7 @@ public:
 
 	void update(const vector<SDL_Event>& keyboard_events) {
 		st.keyboard_events = keyboard_events;
+
 		for (auto& update : updates) {
 			update->calculate();
 		}

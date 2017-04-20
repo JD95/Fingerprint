@@ -20,6 +20,8 @@ const float world_step = 0.0167f;
 
 constexpr float model_body_ratio = 1.23f;
 
+using Int64 = unsigned long long;
+
 class SceneState
 {
 protected:
@@ -31,6 +33,7 @@ public:
 	SlotMap<Entity> gui_entities;
 	Reactive<Camera> main_camera;
 	Reactive<std::vector<SDL_Event>> keyboard_events;
+	Reactive<Int64> time;
 
 	SceneState();
 	~SceneState();
