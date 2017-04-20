@@ -90,7 +90,7 @@ inline void resolve_friction(Manifold& m, float e, float j) {
 
 	// PythagoreanSolve = A^2 + B^2 = C^2, solving for C given A and B
 	// Use to approximate mu given friction coefficients of each body
-	float mu = pythagorean_solve(m.A->static_friction, m.B->static_friction);
+	float mu = std::min(m.A->static_friction, m.B->static_friction);
 
 	// Clamp magnitude of friction and create impulse vector
 	glm::vec2 friction_impulse;
@@ -98,7 +98,7 @@ inline void resolve_friction(Manifold& m, float e, float j) {
 		friction_impulse = jt * t; // jt * t;
 	else
 	{
-		friction_impulse = -j * t * pythagorean_solve(m.A->dynamic_friction, m.B->dynamic_friction);
+		friction_impulse = -j * t * std::min(m.A->dynamic_friction, m.B->dynamic_friction);
 	}
 
 	if (friction_impulse[0] > 5 || friction_impulse[1] > 5)
@@ -155,16 +155,16 @@ void calculate_resolution(Manifold& m)
 
 
 	// Stop acceleration when come in contact with an object
-	if (m.normal.x == 0 || m.normal.y ==0) //affecting y direction
-	{
-		float temp = m.A->acceleration.x;
-		m.A->acceleration = glm::vec2(temp, 0);
-	}
-	else				//affecting x direction
-	{
-		float temp = m.A->acceleration.y;
-		m.A->acceleration = glm::vec2(0, temp);
-	}
+	//if (m.normal.x == 0 || m.normal.y ==0) //affecting y direction
+	//{
+	//	float temp = m.A->acceleration.x;
+	//	m.A->acceleration = glm::vec2(temp, 0);
+	//}
+	//else				//affecting x direction
+	//{
+	//	float temp = m.A->acceleration.y;
+	//	m.A->acceleration = glm::vec2(0, temp);
+	//}
 
 	resolve_friction(m, e, j);
 }
