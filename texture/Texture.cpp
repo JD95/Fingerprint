@@ -18,7 +18,7 @@ Texture::Texture(std::string texture_name)
 	/* check for an error during the load process */
 	if (0 == texture_id)
 	{
-		printf("SOIL loading error: '%s'\n", SOIL_last_result());
+		printf("SOIL loading error for %s: '%s'\n", texture_name.c_str(), SOIL_last_result());
 	}
 }
 

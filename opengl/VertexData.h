@@ -3,11 +3,11 @@
 #include "GL\glew.h"
 
 struct RGBA {
-	GLubyte r;
-	GLubyte g;
+	GLfloat r;
+	GLfloat g;
 	GLubyte b;
 	GLubyte a;
-	RGBA(GLubyte r, GLubyte g, GLubyte b, GLubyte a);
+	RGBA(GLfloat r, GLfloat g, GLubyte b, GLubyte a);
 	~RGBA();
 };
 

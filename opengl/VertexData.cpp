@@ -9,7 +9,7 @@ VertexData2D::~VertexData2D()
 {
 }
 
-RGBA::RGBA(GLubyte r, GLubyte g, GLubyte b, GLubyte a)
+RGBA::RGBA(GLfloat r, GLfloat g, GLubyte b, GLubyte a)
 	: r(r), g(g), b(b), a(a)
 {
 }

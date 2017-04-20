@@ -54,7 +54,7 @@ protected:
 		glEnableVertexAttribArray(vecLoc);
 
 		// Sets up pipe for color data to be sent to the shader
-		glVertexAttribPointer(colorLoc, 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(VertexData2D), buffer_offset(0));
+		glVertexAttribPointer(colorLoc, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData2D), buffer_offset(0));
 		glEnableVertexAttribArray(colorLoc);
 	}
 
