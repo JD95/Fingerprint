@@ -12,6 +12,7 @@
 #include "../texture/texture.h"
 #include "../opengl/vertexdata.h"
 #include "../reactive/reactive.h"
+#include "../texture/SpriteSheet.h"
 
 /*!
 	Generates a polygon based on the given verties.
@@ -44,11 +45,14 @@ public:
 	*/
 	Reactive<glm::vec2> sprite_position;
 
-	Polygon(std::string texture_name, std::vector<VertexData2D> vs)
+	SpriteSheet sprite_sheet;
+
+	Polygon(std::string texture_name, unsigned int sprite_rows, unsigned int sprite_cols, std::vector<Animation> animations, std::vector<VertexData2D> vs)
 		: vertices(vs)
 		, texture(texture_name)
-		, sprite_box(1.0f,1.0f)
-		, sprite_position(glm::vec2(0.0f,0.0f))
+		, sprite_sheet(sprite_rows, sprite_cols, animations)
+		, sprite_box(1.0f / (float)sprite_cols, 1.0f / (float)sprite_rows)
+		, sprite_position(glm::vec2(0.0f, 1.0f - (1.0f / sprite_rows)))
 		, shader({ "labrat/shader/programs/basic.vert", "labrat/shader/programs/basic.frag", NULL, NULL }, 
 			[](GLuint program) { return std::make_tuple(
 				UniformMat4(program, "modelMatrix"),
@@ -61,11 +65,11 @@ public:
 		model.use_vbo<0>().setBufferData(vertices);
 	}
 
-	Polygon(const Polygon& other) 
-		: shader(other.shader)
-	{
-		std::cout << "COPY CONSTRUCTOR CALLED!!!!" << std::endl;
-	}
+	//Polygon(const Polygon& other) 
+	//	: shader(other.shader)
+	//{
+	//	std::cout << "COPY CONSTRUCTOR CALLED!!!!" << std::endl;
+	//}
 
 	~Polygon() {};
 

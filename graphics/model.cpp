@@ -12,3 +12,15 @@ Model::Model(std::string name, std::vector<VertexData2D> ts)
 Model::~Model()
 {
 }
+
+AnimatedModel::AnimatedModel()
+{
+}
+
+AnimatedModel::AnimatedModel(std::string name, unsigned int r, unsigned int c, std::vector<Animation> as, std::vector<VertexData2D> vs)
+	: Model(name, vs)
+	, rows(r)
+	, cols(c)
+	, animations(as)
+{
+}

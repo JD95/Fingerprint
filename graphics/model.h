@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../opengl/VertexData.h"
+#include "../texture/SpriteSheet.h"
 
 
 struct Model
@@ -16,3 +17,18 @@ public:
 	~Model();
 };
 
+
+struct AnimatedModel : Model {
+
+	unsigned int rows;
+	unsigned int cols;
+	std::vector<Animation> animations;
+
+	AnimatedModel();
+	AnimatedModel( 
+		std::string name, 
+		unsigned int rows,
+		unsigned int cols, 
+		std::vector<Animation> animations, 
+		std::vector<VertexData2D> vs);
+};
