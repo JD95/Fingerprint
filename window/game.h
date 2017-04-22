@@ -8,6 +8,7 @@
 
 #include <GL/glew.h>
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 #include "../opengl/vertex_array_object.h"
 #include "../opengl/vertex_buffer_object.h"
@@ -19,6 +20,30 @@
 
 using std::vector;
 using std::array;
+
+class Sound {
+	Mix_Chunk* audio;
+	int channel;
+
+public:
+
+	Sound(std::string file_path)
+		: channel(0) {
+		audio = Mix_LoadWAV(file_path.c_str());
+		if (audio == NULL)
+		{
+			fprintf(stderr, Mix_GetError(), file_path.c_str());
+		}
+	}
+
+	~Sound() {
+		Mix_FreeChunk(audio);
+	}
+
+	void play(int loops = 0) {
+		channel = Mix_PlayChannel(-1, audio, loops);
+	}
+};
 
 template<class T>
 class Game {
@@ -90,11 +115,13 @@ public:
 		init = false;
 
 		// Initialize SDL's Video subsystem
-		if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		{
 			std::cout << "Failed to init SDL\n";
 			return;
 		}
+
+		atexit(SDL_Quit);
 
 		// Create our window centered at 512x512 resolution
 		mainWindow = SDL_CreateWindow(programName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -123,6 +150,25 @@ public:
 		glewInit();
 #endif
 
+		// AUDIO SETUP
+
+		// Set up the global audio stream
+		int result = Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 512);
+		if (result < 0)
+		{
+			fprintf(stderr, "Unable to open audio: %s\n", SDL_GetError());
+			exit(-1);
+		}
+
+		// Allocate set number of audio channels
+		result = Mix_AllocateChannels(4);
+
+		if (result < 0)
+		{
+			fprintf(stderr, "Unable to allocate mixing channels: %s\n", SDL_GetError());
+			exit(-1);
+		}
+
 		init = true;
 	}
 
@@ -133,6 +179,9 @@ public:
 
 		// Destroy our window
 		SDL_DestroyWindow(mainWindow);
+
+		// Close audio channels
+		Mix_CloseAudio();
 
 		// Shutdown SDL 2
 		SDL_Quit();
@@ -156,6 +205,9 @@ public:
 
 		Scene<T> scene;
 
+		Sound song("labrat-game/assets/music/pearson_awakes.wav");
+
+		song.play(-1);
 
 		while (loop) {
 			std::vector<SDL_Event> events;
@@ -170,7 +222,7 @@ public:
 				if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 				{
 					events.push_back(event);
-				}
+				}	
 			}
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

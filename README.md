@@ -18,6 +18,7 @@ Step 2: Get and build the libraries
   - Download the following library versions:
     - glew-2.0.0-win32
     - SDL2 2.0.4 VC Development Library
+	- [SDL2 Mixer 2.0.1 VC Development Library](https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.1-VC.zip)
     - SOIL (Simple OpenGL Image Library)
       - Build the included VC8 project to make SOIL.lib
     - GLM 0.9.8.4
@@ -26,15 +27,18 @@ Step 3: Edit your project properties (All paths relative to where you put the li
   - VC++ Directories -> Include Directories
     - glm-0.9.8.4\glm\glm
     - glew-2.0.0-win32\glew-2.0.0\include
-    - SLD2-2.0.4\include
+    - SDL2-2.0.4\include
+	- SDL2_mixer-2.0.1\inlcude\
     - Simple OpenGL Image Library\src
   - Linker -> General -> Additional Library Directories
     - SDL2-2.0.4\lib\x86
+	- SDL2_mixer-2.0.1\lib\x86
     - glew-2.0.0-win32\glew-2.0.0\lib\Release\Win32
     - SOIL (wherever you put the SOIL.lib you build in Step 2)
   - Linker -> Input -> Additional Dependencies
     - glew32.lib
     - SDL2.lib
+	- SDL2_mixer.lib
     - SDL2main.lib
     - SOIL.lib
     - opengl32.lib
