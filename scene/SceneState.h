@@ -45,6 +45,7 @@ public:
 	Entity* spawn_body(Model model, float layer, float x, float y, float width, float height, float mass);
 	Entity* spawn_body(AnimatedModel model, float layer, float x, float y, float width, float height, float mass);
 	Entity* spawn_massless(Model model, float layer, float x, float y, float width, float height);
+	Entity * spawn_massless(AnimatedModel model, float layer, float x, float y, float width, float height);
 	Entity* gui_spawn(Model model, float x, float y, float width, float height);
 	void render_scene(Camera camera);
 	virtual void construct_updates(vector<Updater>& updates) {}

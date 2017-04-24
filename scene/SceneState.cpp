@@ -94,6 +94,13 @@ Entity* SceneState::spawn_massless(Model model, float layer, float x, float y, f
 		Transform(glm::vec3(x + model_width, y + model_height, layer), glm::vec3(model_width, model_height, 1.0f)));
 }
 
+Entity* SceneState::spawn_massless(AnimatedModel model, float layer, float x, float y, float width, float height) {
+	auto model_width = (width / 2.0f);
+	auto model_height = (height / 2.0f);
+	return spawn(model,
+		Transform(glm::vec3(x + model_width, y + model_height, layer), glm::vec3(model_width, model_height, 1.0f)));
+}
+
 Entity* SceneState::gui_spawn(Model model, float x, float y, float width, float height)
 {
 	auto new_entity_id = gui_entities.create_object();
