@@ -220,7 +220,7 @@ public:
 				if (event.type == SDL_QUIT)
 					loop = false;
 
-				if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+				if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP || event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP)
 				{
 					events.push_back(event);
 				}	
