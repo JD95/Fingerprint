@@ -21,29 +21,7 @@
 using std::vector;
 using std::array;
 
-class Sound {
-	Mix_Chunk* audio;
-	int channel;
 
-public:
-
-	Sound(std::string file_path)
-		: channel(0) {
-		audio = Mix_LoadWAV(file_path.c_str());
-		if (audio == NULL)
-		{
-			fprintf(stderr, Mix_GetError(), file_path.c_str());
-		}
-	}
-
-	~Sound() {
-		Mix_FreeChunk(audio);
-	}
-
-	void play(int loops = 0) {
-		channel = Mix_PlayChannel(-1, audio, loops);
-	}
-};
 
 template<class T>
 class Game {
@@ -205,10 +183,6 @@ public:
 		bool loop = true;
 
 		Scene<T> scene;
-
-		Sound song("labrat-game/assets/music/pearson_awakes.wav");
-
-		song.play(-1);
 
 		while (loop) {
 			std::vector<SDL_Event> events;

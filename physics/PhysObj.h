@@ -7,7 +7,7 @@
 
 #include "../utilities/SlotMap.h"
 #include "CollObj.h"
-
+#include "Collisions.h"
 #pragma once
 //Items directly realted to the phys obj
 struct Material
@@ -38,7 +38,7 @@ public:
 	float static_friction = 0.7f;
 	float dynamic_friction = 0.5f;
 	object_id entity_ID;
-	std::vector<object_id> collided_with;
+	Collisions collisions;
 
 	std::vector<glm::vec2> normals_acting;
 

@@ -15,6 +15,7 @@
 #include "../physics/World.h"
 
 #include "../reactive/source.h"
+#include "../sound/Sound.h"
 
 const float world_step = 0.0167f;
 
@@ -27,6 +28,7 @@ class SceneState
 protected:
 	World physics;
 	SlotMap<Entity> entities;
+	SlotMap<Sound> sounds;
 	std::map<std::string, Polygon*> models; /**< Had to be raw pointers to prevent copy construction.*/
 
 public:
@@ -48,6 +50,7 @@ public:
 	Entity* spawn_massless(Model model, float layer, float x, float y, float width, float height);
 	Entity * spawn_massless(AnimatedModel model, float layer, float x, float y, float width, float height);
 	Entity* gui_spawn(Model model, float x, float y, float width, float height);
+	Sound* load_sound(std::string path);
 	void render_scene(Camera camera);
 	virtual void construct_updates(vector<Updater>& updates) {}
 

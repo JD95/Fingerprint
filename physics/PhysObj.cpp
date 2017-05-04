@@ -109,14 +109,6 @@ inline void resolve_friction(Manifold& m, float e, float j) {
 	m.B->velocity += (m.B->mass.inv_mass) * friction_impulse;
 }
 
-
-void add_obj_id(Manifold & m)
-{
-	if (std::find(m.A->collided_with.begin(), m.A->collided_with.end(), m.B->entity_ID) == m.A->collided_with.end()) {
-		m.A->collided_with.push_back(m.B->entity_ID);
-	}
-}
-
 /*!
 Based on tutorial from
 https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-friction-scene-and-jump-table--gamedev-7756
@@ -149,9 +141,11 @@ void calculate_resolution(Manifold& m)
 
 	float ratio = m.A->mass.mass / sum_mass;
 	m.A->velocity -= ratio * impulse;
+	m.A->collisions.add_collision(m.A->entity_ID, -1.0f * (ratio * impulse));
 
 	ratio = m.B->mass.mass / sum_mass;
 	m.B->velocity += ratio * impulse;
+	m.B->collisions.add_collision(m.B->entity_ID, (ratio * impulse));
 
 
 	// Stop acceleration when come in contact with an object
@@ -268,7 +262,6 @@ bool AABB_vs_AABB(Manifold& m)
 				}
 
 				m.penetration = x_overlap;
-				add_obj_id(m);
 				return true;
 			}
 			else									// y has the least
@@ -288,7 +281,6 @@ bool AABB_vs_AABB(Manifold& m)
 
 
 				m.penetration = y_overlap;
-				add_obj_id(m);
 				return true;
 			}
 		}

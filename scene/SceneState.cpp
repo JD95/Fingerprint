@@ -117,6 +117,14 @@ Entity* SceneState::gui_spawn(Model model, float x, float y, float width, float 
 	return new_entity;
 }
 
+Sound * SceneState::load_sound(std::string path)
+{
+	auto id = sounds.create_object();
+	auto sound = sounds.get_object(id);
+	sound->load_from_file(path);
+	return sound;
+}
+
 
 
 void SceneState::render_scene(Camera camera)
