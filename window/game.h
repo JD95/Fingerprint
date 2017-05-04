@@ -230,6 +230,9 @@ public:
 
 			scene.update(events);
 
+			if (scene.st.current_level.value == -1)
+				loop = false;
+
 			glFlush();
 
 			SDL_GL_SwapWindow(mainWindow);

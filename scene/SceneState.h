@@ -34,6 +34,7 @@ public:
 	Reactive<Camera> main_camera;
 	Reactive<std::vector<SDL_Event>> keyboard_events;
 	Reactive<Int64> time;
+	Reactive<int> current_level;
 
 	SceneState();
 	~SceneState();
