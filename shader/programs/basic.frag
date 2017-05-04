@@ -12,5 +12,7 @@ void main() {
 
 	float x = (color[0] * sprite_box[0]) + sprite_position[0];
 	float y = (color[1] * sprite_box[1]) + sprite_position[1];
-	fColor = texture(tex, vec2(x, y)); 
+	vec4 t = texture(tex, vec2(x, y));
+	if(t.a < 0.5) discard;
+	fColor = t; 
 } 
