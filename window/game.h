@@ -5,6 +5,7 @@
 #include <array>
 #include <fstream>
 #include <memory>
+#include <chrono>
 
 #include <GL/glew.h>
 #include <SDL.h>
@@ -183,12 +184,18 @@ public:
 		bool loop = true;
 
 		Scene<T> scene;
+		std::chrono::time_point<std::chrono::system_clock> start, end;
+		std::chrono::nanoseconds delta_time;
 
 		while (loop) {
+			delta_time = end - start;
+			std::cout << delta_time.count() << "\n";
+			start = std::chrono::system_clock::now();
 			std::vector<SDL_Event> events;
 
 			// Handle SDL events
 			SDL_Event event;
+
 			while (SDL_PollEvent(&event))
 			{
 				if (event.type == SDL_QUIT)
@@ -202,7 +209,7 @@ public:
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			scene.update(events);
+			scene.update(events, delta_time);
 
 			if (scene.st.current_level.value == -1)
 				loop = false;
@@ -210,6 +217,7 @@ public:
 			glFlush();
 
 			SDL_GL_SwapWindow(mainWindow);
+			end = std::chrono::system_clock::now();
 		}
 
 		return 0;

@@ -2,6 +2,7 @@
 #include <functional>
 #include <vector>
 #include <memory>
+#include <chrono>
 
 #include <SDL.h>
 
@@ -27,7 +28,7 @@ public:
 
 	~Scene() {}
 
-	void update(const vector<SDL_Event>& keyboard_events) {
+	void update(const vector<SDL_Event>& keyboard_events, std::chrono::nanoseconds delta_time) {
 		st.keyboard_events = keyboard_events;
 
 		for (auto& update : updates) {
@@ -37,6 +38,7 @@ public:
 			update->update();
 		}
 		st.render_scene(st.main_camera.value);
+		st.delta_time = delta_time;
 	}
 };
 

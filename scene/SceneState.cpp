@@ -5,6 +5,7 @@ SceneState::SceneState()
 {
 	int x = 0;
 	time = 0;
+	auto test = (end - start);
 }
 
 

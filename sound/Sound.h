@@ -19,7 +19,9 @@ public:
 	void load_from_file(std::string file_path);
 
 	void play(int loops = 0);
+
+	double length();
 };
 
 template <int n>
-using varied_sound = std::array<Sound*, n>;
+using SoundClips = std::array<Sound*, n>;

@@ -5,6 +5,7 @@
 #include <memory>
 #include <vec2.hpp>
 #include <type_traits>
+#include <chrono>
 
 #include "../entity/entity.h"
 #include "../primitive_shapes/polygon.h"
@@ -30,8 +31,9 @@ protected:
 	SlotMap<Entity> entities;
 	SlotMap<Sound> sounds;
 	std::map<std::string, Polygon*> models; /**< Had to be raw pointers to prevent copy construction.*/
-
 public:
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+	Reactive<std::chrono::nanoseconds> delta_time;
 	SlotMap<Entity> gui_entities;
 	Reactive<Camera> main_camera;
 	Reactive<std::vector<SDL_Event>> keyboard_events;
