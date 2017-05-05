@@ -189,7 +189,6 @@ public:
 
 		while (loop) {
 			delta_time = end - start;
-			std::cout << delta_time.count() << "\n";
 			start = std::chrono::system_clock::now();
 			std::vector<SDL_Event> events;
 
