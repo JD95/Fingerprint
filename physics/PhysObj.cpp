@@ -141,11 +141,11 @@ void calculate_resolution(Manifold& m)
 
 	float ratio = m.A->mass.mass / sum_mass;
 	m.A->velocity -= ratio * impulse;
-	m.A->collisions.add_collision(m.A->entity_ID, -1.0f * (ratio * impulse));
+	m.A->collisions.add_collision(m.B->entity_ID, -1.0f * (ratio * impulse));
 
 	ratio = m.B->mass.mass / sum_mass;
 	m.B->velocity += ratio * impulse;
-	m.B->collisions.add_collision(m.B->entity_ID, (ratio * impulse));
+	m.B->collisions.add_collision(m.A->entity_ID, (ratio * impulse));
 
 
 	// Stop acceleration when come in contact with an object

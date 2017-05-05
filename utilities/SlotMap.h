@@ -11,6 +11,11 @@ struct object_id {
 		return (a.index == b.index)
 			&& (a.version == b.version);
 	}
+
+	friend bool operator<(const object_id& a, const object_id& b) {
+		if (a.index == b.index) return (a.version < b.version);
+		else return a.index < b.index;
+	}
 };
 
 /*!

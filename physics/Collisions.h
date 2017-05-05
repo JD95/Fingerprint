@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm.hpp>
-#include <vector>
+#include <set>
 #include <algorithm>
 #include <string>
 
@@ -11,6 +11,9 @@
 struct CollisionInfo {
 	object_id id;
 	glm::vec2 velocity;
+	friend bool operator<(const CollisionInfo& a, const CollisionInfo& b) {
+		return a.id < b.id;
+	}
 };
 
 class Collisions
@@ -18,7 +21,7 @@ class Collisions
 	int red;
 	int blue;
 	int green;
-	std::vector<CollisionInfo> colors[3];
+	std::set<CollisionInfo> colors[3];
 
 	/*
 		There are three vectors used: green, blue, and red.
@@ -47,14 +50,14 @@ class Collisions
 
 public:
 
-	std::vector<CollisionInfo> enter;
+	std::set<CollisionInfo> enter;
 
 	Collisions();
 	~Collisions();
 
 	void add_collision(object_id id, glm::vec2 velocity);
-	std::vector<CollisionInfo> contact();
-	std::vector<CollisionInfo> exit();
+	std::set<CollisionInfo> contact();
+	std::set<CollisionInfo> exit();
 	void cycle_phase();
 
 	friend std::ostream& operator<<(std::ostream& out, const Collisions& c) {

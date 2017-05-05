@@ -4,13 +4,15 @@
 
 void Collisions::keep(object_id id)
 {
-	auto removed  = std::partition(colors[green].begin(), colors[green].end(),
+	auto removed  = std::find_if(colors[green].begin(), colors[green].end(),
 		[id](auto a) { 
-		return a.id.index != id.index; 
+		return a.id.index == id.index; 
 	});
+
+	if (removed == colors[green].end()) return;
 	
-	colors[red].insert(colors[red].end(), removed, colors[green].end());
-	colors[green].erase(removed, colors[green].end());
+	colors[red].insert(*removed);
+	colors[green].erase(removed);
 }
 
 Collisions::Collisions()
@@ -24,21 +26,19 @@ Collisions::~Collisions()
 }
 
 void Collisions::add_collision(object_id id, glm::vec2 velocity) {
-	auto begin = colors[green].begin();
-	auto end = colors[green].end();
-	auto already_colliding = colors[green].end() != std::find_if(begin, end,
-		[id](auto a) { return a.id.index == id.index; });
+
+	auto already_colliding = colors[green].end() != colors[green].find({ id, velocity });
 
 	if (already_colliding) keep(id);
-	else enter.push_back(CollisionInfo{ id, velocity });
+	else enter.insert(CollisionInfo{ id, velocity });
 }
 
-std::vector<CollisionInfo> Collisions::contact()
+std::set<CollisionInfo> Collisions::contact()
 {
 	return colors[green];
 }
 
-std::vector<CollisionInfo> Collisions::exit()
+std::set<CollisionInfo> Collisions::exit()
 {
 	return colors[blue];
 }
@@ -49,7 +49,7 @@ void Collisions::cycle_phase()
 	blue = (blue + 1) % 3;
 	green = (green + 1) % 3;
 
-	colors[green].insert(colors[green].end(), enter.begin(), enter.end());
+	colors[green].insert(enter.begin(), enter.end());
 	enter.clear();
 	colors[red].clear();
 }
