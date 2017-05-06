@@ -101,8 +101,8 @@ inline void resolve_friction(Manifold& m, float e, float j) {
 		friction_impulse = -j * t * std::min(m.A->dynamic_friction, m.B->dynamic_friction);
 	}
 
-	if (friction_impulse[0] > 5 || friction_impulse[1] > 5)
-		std::cout << "Too much friction_impulse!";
+	//if (friction_impulse[0] > 5 || friction_impulse[1] > 5)
+	//	//std::cout << "Too much friction_impulse!";
 
 	// Apply
 	m.A->velocity -= (m.A->mass.inv_mass) * friction_impulse;

@@ -34,7 +34,8 @@ struct AABB
 
 	//void get_rect()
 	//{
-	//	std::cout << "GET RICKITTY WRECKTED SON!!!11!!!1 \N";
+	//	std::
+	//<< "GET RICKITTY WRECKTED SON!!!11!!!1 \N";
 	//}
 };
 

@@ -65,7 +65,7 @@ class Game {
 
 		if (error != "")
 		{
-			std::cout << "SLD Error : " << error << std::endl;
+			//std::cout << "SLD Error : " << error << std::endl;
 
 			if (line != -1)
 				std::cout << "\nLine : " << line << std::endl;
@@ -78,10 +78,10 @@ class Game {
 	{
 		int value = 0;
 		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &value);
-		std::cout << "SDL_GL_CONTEXT_MAJOR_VERSION : " << value << std::endl;
+		//std::cout << "SDL_GL_CONTEXT_MAJOR_VERSION : " << value << std::endl;
 
 		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &value);
-		std::cout << "SDL_GL_CONTEXT_MINOR_VERSION: " << value << std::endl;
+		//std::cout << "SDL_GL_CONTEXT_MINOR_VERSION: " << value << std::endl;
 	}
 
 public:
@@ -210,8 +210,16 @@ public:
 
 			scene.update(events, delta_time);
 
-			if (scene.st.current_level.value == -1)
+			if (scene.st.current_level.value == -1) {
+				std::cout << "You lost!\n";
 				loop = false;
+			}
+
+			if (scene.st.current_level.value == 2) {
+				std::cout << "You won!\n";
+				loop = false;
+			}
+				
 
 			glFlush();
 

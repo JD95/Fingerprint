@@ -30,8 +30,8 @@ void load_shader_text(const char* shader_file, GLuint &vertexShader)
 	glShaderSource(vertexShader, 1, &text, NULL);
 	glCompileShader(vertexShader);
 
-	for (int i = 0; i < length; i++)
-		std::cout << text[i];
+	/*for (int i = 0; i < length; i++)
+		std::cout << text[i];*/
 }
 
 void display_info_log(const GLuint shader)
@@ -41,8 +41,8 @@ void display_info_log(const GLuint shader)
 
 	glGetShaderInfoLog(shader, bufSize, NULL, infoLog);
 
-	for (int i = 0; i < bufSize; i++)
-		std::cout << infoLog[i];
+	//for (int i = 0; i < bufSize; i++)
+	//	std::cout << infoLog[i];
 }
 
 void check_load_status(const GLuint shader, const std::string fail_message)
