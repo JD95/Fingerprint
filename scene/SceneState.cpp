@@ -109,7 +109,7 @@ Entity* SceneState::gui_spawn(Model model, float x, float y, float width, float 
 	new_entity->transform = Transform(glm::vec3(x,y,0), glm::vec3(width, height, 1.0f));
 
 	if (models.find(model.model_name) == models.end()) {
-		auto new_model = new Polygon(model.model_name, 0, 0, {}, model.tex_coords);
+		auto new_model = new Polygon(model.model_name, 1, 1, {}, model.tex_coords);
 		models.emplace(model.model_name, new_model);
 	}
 
