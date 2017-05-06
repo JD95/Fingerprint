@@ -22,8 +22,8 @@ void Sound::load_from_file(std::string file_path)
 	}
 }
 
-void Sound::play(int loops) {
-	channel = Mix_PlayChannel(-1, audio, loops);
+void Sound::play(int loops, int channel) {
+	channel = Mix_PlayChannel(channel, audio, loops);
 }
 
 double Sound::length()

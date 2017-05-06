@@ -6,10 +6,10 @@
 #include "../utilities/SlotMap.h"
 
 class Sound {
-	Mix_Chunk* audio;
 	int channel;
 
 public:
+	Mix_Chunk* audio;
 	object_id id;
 	Sound(std::string file_path);
 	Sound();
@@ -18,7 +18,7 @@ public:
 
 	void load_from_file(std::string file_path);
 
-	void play(int loops = 0);
+	void play(int loops = 0, int channel = -1);
 
 	double length();
 };
