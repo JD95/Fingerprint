@@ -34,8 +34,8 @@ glm::mat4 Transform::model_matrix()
 {
 	glm::mat4 model_m;
 
-	model_m = glm::translate(model_m, position.value);
-	model_m *= glm::mat4_cast(rotation.value);
-	model_m = glm::scale(model_m, scale.value);
+	model_m = glm::translate(model_m, position.v);
+	model_m *= glm::mat4_cast(rotation.v);
+	model_m = glm::scale(model_m, scale.v);
 	return model_m;
 }

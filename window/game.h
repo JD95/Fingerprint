@@ -210,12 +210,12 @@ public:
 
 			scene.update(events, delta_time);
 
-			if (scene.st.current_level.value == -1) {
+			if (scene.st.current_level.v == -1) {
 				std::cout << "You lost!\n";
 				loop = false;
 			}
 
-			if (scene.st.current_level.value == 2) {
+			if (scene.st.current_level.v == 2) {
 				std::cout << "You won!\n";
 				loop = false;
 			}

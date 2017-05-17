@@ -28,15 +28,15 @@ public:
 
 template <class T>
 struct Reactive {
-	T value;
+	T v;
 
 	Reactive() {}
-	Reactive(T t) { value = t; }
-	Reactive(const Reactive<T>& other) { value = other.value; }
+	Reactive(T t) { v = t; }
+	Reactive(const Reactive<T>& other) { v = other.v; }
 
-	void operator=(const T& t) { value = t; }
-	Get<T> getter() { return Get<T>(&value); }
-	Set<T> setter() { return Set<T>(&value); }
+	void operator=(const T& t) { v = t; }
+	Get<T> getter() { return Get<T>(&v); }
+	Set<T> setter() { return Set<T>(&v); }
 
 };
 

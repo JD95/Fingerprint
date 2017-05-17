@@ -21,12 +21,12 @@ SpriteSheet::~SpriteSheet()
 
 glm::vec2 SpriteSheet::step_animation() {
 
-	Animation& a = animations[current_animation.value];
+	Animation& a = animations[current_animation.v];
 
-	if (previous_animation != current_animation.value || current_row == a.end_cell[0] && current_col == a.end_cell[1]) {
+	if (previous_animation != current_animation.v || current_row == a.end_cell[0] && current_col == a.end_cell[1]) {
 		current_row = a.start_cell[0];
 		current_col = a.start_cell[1];
-		previous_animation = current_animation.value;
+		previous_animation = current_animation.v;
 	}
 	else {
 		current_col++;

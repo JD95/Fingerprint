@@ -54,7 +54,7 @@ Entity* SceneState::spawn(Model model, Transform transform, PhysObj body)
 
 	new_entity->body = physics.add_object(body);
 
-	new_entity->body.value->entity_ID = new_entity->id;
+	new_entity->body.v->entity_ID = new_entity->id;
 
 	return new_entity;
 }
@@ -65,7 +65,7 @@ Entity* SceneState::spawn(AnimatedModel model, Transform transform, PhysObj body
 
 	new_entity->body = physics.add_object(body);
 
-	new_entity->body.value->entity_ID = new_entity->id;
+	new_entity->body.v->entity_ID = new_entity->id;
 
 	return new_entity;
 }
@@ -131,7 +131,7 @@ Sound * SceneState::load_sound(std::string path)
 void SceneState::render_scene(Camera camera)
 {
 	physics.step();
-	time.value++;
+	time.v++;
 	auto chunks = entities.object_table.size();
 
 	// Renders all entities which have in-use ids

@@ -37,7 +37,7 @@ public:
 		for (auto& update : updates) {
 			update->update();
 		}
-		st.render_scene(st.main_camera.value);
+		st.render_scene(st.main_camera.v);
 		st.delta_time = delta_time;
 	}
 };

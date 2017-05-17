@@ -75,7 +75,7 @@ public:
 
 	void render(const glm::mat4& mvp) {
 		model.bind();
-		shader.render_object(0, 1, GL_TRIANGLES, vertices.size(), mvp, std::make_tuple(0, texture.id()), sprite_box, sprite_position.value);
+		shader.render_object(0, 1, GL_TRIANGLES, vertices.size(), mvp, std::make_tuple(0, texture.id()), sprite_box, sprite_position.v);
 	}
 };
 
